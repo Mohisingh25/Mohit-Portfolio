@@ -22,6 +22,26 @@ body{
     position: relative;
     z-index: 1;
 }
+.logo {
+   width: 150px; /* Adjust as needed */
+   filter: drop-shadow(0 0 10px #ff9100);
+}
+#sidemenu li a {
+   text-decoration: none;
+   color: white;
+   font-size: 18px;
+   text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+}
+.Header-text{
+   text-decoration: none;
+   color: white;
+   font-size: 18px;
+   text-shadow: 0 0 10px hsl(19, 100%, 50%), 0 0 20px #ff7700, 0 0 30px #000000;
+}
+.Header-text span {
+   color: #000000;
+   text-shadow: 0 0 10px #000000, 0 0 20px #000000;
+}
 .container{
     padding: 10px 10px;
     position: relative;
@@ -330,7 +350,7 @@ nav .fa-solid{
 
 @media only screen and (max-width:600px){
    #header{
-      background-image: url(images/backgmobile.gif);
+      background-image: url(images/Phonebg.png);
    }
    .header-text{
       margin-top: 100%;
