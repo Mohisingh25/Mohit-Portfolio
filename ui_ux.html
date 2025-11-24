@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UI/UX Work Gallery — Mohit Singh</title>
+  <style>
+    :root{ --bg:#050505; --card:#0f1720; --muted:#9aa4af; --accent:#ff2e6d; --glass: rgba(255,255,255,0.04)}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{background:linear-gradient(180deg,#000103 0%, #090404 0%);color:#e6eef6;padding:40px;padding-bottom:140px}
+    .section{max-width:1200px;margin:0 auto}
+    h2{font-size:38px;margin:0 0 18px;color: #ff2e6d;}
+    p.lead{color:var(--muted);margin:6px 0 24px}
+
+    /* layout columns */
+    .columns{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+    @media (max-width:1000px){ .columns{grid-template-columns:1fr} }
+
+    /* gallery grid */
+    .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:12px;box-shadow:0 6px 20px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03);overflow:hidden}
+    .thumb{position:relative;border-radius:8px;overflow:hidden;cursor:pointer}
+    .thumb img{display:block;width:100%;height:210px;object-fit:cover;transition:transform .35s ease}
+    .thumb:hover img{transform:scale(1.03)}
+    .meta{display:flex;justify-content:space-between;align-items:center;padding-top:10px}
+    .title{font-weight:700;font-size:16px}
+    .tags{color:var(--muted);font-size:13px}
+    .actions{display:flex;gap:8px;align-items:center}
+    .btn{background:var(--glass);border:none;padding:8px 10px;border-radius:8px;color:#eaf0f8;font-size:13px;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,#ff7a9a,#ff2e6d);box-shadow:0 6px 18px rgba(255,46,109,0.12)}
+
+    /* right column special header */
+    .side-header{font-size:18px;margin-bottom:10px;font-weight:700}
+    .side-note{color:var(--muted);font-size:13px;margin-bottom:14px}
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(4,8,18,0.65);z-index:60}
+    .modal.open{display:flex}
+    .modal-card{width:min(1100px,96%);max-height:86vh;background:linear-gradient(180deg,#0b0f14,#0b1016);border-radius:10px;padding:18px;display:grid;grid-template-columns:1fr 320px;gap:14px}
+    .modal-left img{width:100%;height:70vh;object-fit:contain;border-radius:6px}
+    .modal-right{color:#dce9f6}
+    .modal-right h3{margin:0 0 8px}
+    .modal-right p{color:var(--muted);margin:0 0 14px}
+    .modal-right .links{display:flex;flex-direction:column;gap:10px}
+
+    /* bottom banner */
+    .bottom-banner{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:18px;
+      z-index:210;
+      background:linear-gradient(90deg, rgba(255,46,109,0.12), rgba(255,127,154,0.06));
+      padding:14px 22px;
+      border-radius:12px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      border:1px solid rgba(255,46,109,0.08);
+      text-align:center;
+      font-weight:800;
+      color:#fff;
+      font-size:clamp(14px,2.5vw,20px);
+      letter-spacing:0.2px;
+    }
+
+    /* responsive */
+    @media (max-width:880px){
+      .modal-card{grid-template-columns:1fr}
+      .modal-left img{height:50vh}
+      .bottom-banner{width:92%;left:50%;transform:translateX(-50%);font-size:16px;padding:12px}
+    }
+  </style>
+</head>
+<body>
+  <!-- Home Logo (uses uploaded local path) -->
+  <a href="index.html" style="position:fixed; top:20px; left:20px; z-index:200; display:flex; align-items:center; gap:8px; text-decoration:none;">
+    <img src="images/logo.png" alt="Mohit Logo" style="width: 150px; /* Adjust as needed */
+   filter: drop-shadow(0 0 10px #ff9100);">
+  </a>
+
+  <section class="section">
+    <h2>UI / UX Work</h2>
+    <p class="lead">Click any image to open the Figma file or live project. Use the action buttons to preview a larger image or open the live project.</p>
+
+    <div class="columns">
+      <!-- left: original gallery (Figma + Live) -->
+      <div>
+        <div class="gallery" id="gallery">
+          <!-- Card 1 -->
+          <article class="card" data-project-id="project-1">
+            <div class="thumb" data-figma="https://www.figma.com/design/T90ssRNigJmPMBoL26DgBz/Tapi-tubes-UI?node-id=0-1&t=svZnDjOxKhPi5T7c-1" data-live="https://tapitubes.netlify.app/">
+              <img src="img_ui/Tapi.png" alt="Tapi Tubes — Mohit Singh" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="title">Tapi Tubes (E-commerce) — Concept</div>
+                <div class="tags">UI / UX • Figma</div>
+              </div>
+              <div class="actions">
+                <img class="figma-logo" src="img_ui/Figma-logo.png" alt="figma" title="Open Figma" style="width:28px;height:28px;border-radius:6px;cursor:pointer">
+                <button class="btn" data-action="preview">Preview</button>
+                <button class="btn primary" data-action="open-figma">Open Figma</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="card" data-project-id="project-2">
+            <div class="thumb" data-figma="https://www.figma.com/design/FK4HJ2IOLtvlENhEgsyJ8g/Synergy-Chemical?t=svZnDjOxKhPi5T7c-1" data-live="https://synergychemicals.netlify.app/">
+              <img src="img_ui/syn.png" alt="Synergy — Mohit Singh" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="title">Synergy (E-commerce) — Concept</div>
+                <div class="tags">UI / UX • Figma</div>
+              </div>
+              <div class="actions">
+                <img class="figma-logo" src="img_ui/Figma-logo.png" alt="figma" title="Open Figma" style="width:28px;height:28px;border-radius:6px;cursor:pointer">
+                <button class="btn" data-action="preview">Preview</button>
+                <button class="btn primary" data-action="open-figma">Open Figma</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="card" data-project-id="project-3">
+            <div class="thumb" data-figma="https://www.figma.com/design/6hOiKkmXyBSePsfOu1Xgcw/Sweety-Inimates?t=svZnDjOxKhPi5T7c-1" data-live="https://sweetyintimates.com/">
+              <img src="img_ui/sweety.png" alt="Sweety Intimates — Mohit Singh" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="title">Sweety Intimates (E-commerce) — Concept</div>
+                <div class="tags">UI / UX • Figma</div>
+              </div>
+              <div class="actions">
+                <img class="figma-logo" src="img_ui/Figma-logo.png" alt="figma" title="Open Figma" style="width:28px;height:28px;border-radius:6px;cursor:pointer">
+                <button class="btn" data-action="preview">Preview</button>
+                <button class="btn primary" data-action="open-figma">Open Figma</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="card" data-project-id="project-4">
+            <div class="thumb" data-figma="https://www.figma.com/design/0Lm8K7KPW91W5cObWMvUwQ/CORAL?t=diFutZ2WMt57Mxcj-1" data-live="https://caroal.com/">
+              <img src="img_ui/caroal.png" alt="Caroval — Mohit Singh" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="title">Caroval (E-commerce) — Concept</div>
+                <div class="tags">UI / UX • Figma</div>
+              </div>
+              <div class="actions">
+                <img class="figma-logo" src="img_ui/Figma-logo.png" alt="figma" title="Open Figma" style="width:28px;height:28px;border-radius:6px;cursor:pointer">
+                <button class="btn" data-action="preview">Preview</button>
+                <button class="btn primary" data-action="open-figma">Open Figma</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5 -->
+          <article class="card" data-project-id="project-4">
+            <div class="thumb" data-figma="https://www.figma.com/design/ZTRMYUskMZhxZonnGbx5Ej/Project-logia?t=YCYVkeqQDou30P98-1" data-live="https://www.figma.com/design/ZTRMYUskMZhxZonnGbx5Ej/Project-logia?t=YCYVkeqQDou30P98-1">
+              <img src="img_ui/pro.png" alt="Caroval — Mohit Singh" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="title">Projects (E-commerce) — Concept</div>
+                <div class="tags">UI / UX • Figma</div>
+              </div>
+              <div class="actions">
+                <img class="figma-logo" src="img_ui/Figma-logo.png" alt="figma" title="Open Figma" style="width:28px;height:28px;border-radius:6px;cursor:pointer">
+                <button class="btn" data-action="preview">Preview</button>
+                <button class="btn primary" data-action="open-figma">Open Figma</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 6 -->
+          <article class="card" data-project-id="project-4">
+            <div class="thumb" data-figma="https://www.figma.com/design/iy3KvSCpKBCbS5bA6Rwofg/game-zone-client?t=YCYVkeqQDou30P98-1" data-live="https://www.figma.com/design/iy3KvSCpKBCbS5bA6Rwofg/game-zone-client?t=YCYVkeqQDou30P98-1">
+              <img src="img_ui/game.png" alt="Caroval — Mohit Singh" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="title">Game zone Software — Concept</div>
+                <div class="tags">UI / UX • Figma</div>
+              </div>
+              <div class="actions">
+                <img class="figma-logo" src="img_ui/Figma-logo.png" alt="figma" title="Open Figma" style="width:28px;height:28px;border-radius:6px;cursor:pointer">
+                <button class="btn" data-action="preview">Preview</button>
+                <button class="btn primary" data-action="open-figma">Open Figma</button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- right: few more examples (only live link + preview) -->
+      <aside>
+        <div class="side-header">Few more examples</div>
+        <div class="side-note">These are additional screenshots / quick demos. Click an image to open the live project; no Figma file for these.</div>
+
+        <div class="gallery" id="gallery-live-only">
+          <!-- Live-only Card A -->
+          <article class="card">
+            <div class="thumb" data-live="https://daadis.in/">
+              <img src="img_ui/daadis.png" alt="Extra example 1" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="title">Quick Demo A</div>
+                <div class="tags">Screenshot • Live</div>
+              </div>
+              <div class="actions">
+                <button class="btn" data-action="preview">Preview</button>
+                <button class="btn primary" data-action="open-live">Open Live</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Live-only Card B -->
+          <article class="card">
+            <div class="thumb" data-live="https://www.yudurobotics.com/home">
+              <img src="img_ui/yudu.png" alt="Extra example 2" />
+            </div>
+            <div class="meta">
+              <div>
+                <div class="title">Quick Demo B</div>
+                <div class="tags">Screenshot • Live</div>
+              </div>
+              <div class="actions">
+                <button class="btn" data-action="preview">Preview</button>
+                <button class="btn primary" data-action="open-live">Open Live</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- add more as needed -->
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- bottom banner message -->
+  <div class="bottom-banner">Completed over 50+ Projects — contact to know more</div>
+
+  <!-- Modal preview -->
+  <div class="modal" id="modal">
+    <div class="modal-card">
+      <div class="modal-left">
+        <img id="modal-img" src="" alt="Preview" />
+      </div>
+      <div class="modal-right">
+        <h3 id="modal-title">Project title</h3>
+        <p id="modal-desc">Project description or short notes about role and tools used.</p>
+        <div class="links">
+          <a id="modal-figma" class="btn primary" target="_blank" rel="noopener">Open Figma</a>
+          <a id="modal-live" class="btn" target="_blank" rel="noopener">Open Live Project</a>
+          <button class="btn" id="modal-close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Delegated interactions for both galleries
+    const gallery = document.getElementById('gallery');
+    const galleryLiveOnly = document.getElementById('gallery-live-only');
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalFigma = document.getElementById('modal-figma');
+    const modalLive = document.getElementById('modal-live');
+    const modalClose = document.getElementById('modal-close');
+
+    function handleClick(e, container){
+      const thumb = e.target.closest('.thumb');
+      const actionBtn = e.target.closest('button');
+      const figmaLogo = e.target.closest('.figma-logo');
+
+      if (figmaLogo){
+        // find card, open its figma (if present)
+        const card = figmaLogo.closest('.card');
+        const thumbEl = card.querySelector('.thumb');
+        const url = thumbEl && thumbEl.dataset.figma;
+        if (url) window.open(url, '_blank', 'noopener');
+        return;
+      }
+
+      if (actionBtn){
+        const action = actionBtn.getAttribute('data-action');
+        const card = actionBtn.closest('.card');
+        const thumbEl = card.querySelector('.thumb');
+        if (action === 'preview') return openPreview(thumbEl, card);
+        if (action === 'open-figma') return openLink(thumbEl.dataset.figma);
+        if (action === 'open-live') return openLink(thumbEl.dataset.live);
+      }
+
+      if (thumb){
+        // If thumb has figma -> open figma, else open live if present
+        if (thumb.dataset.figma){
+          window.open(thumb.dataset.figma, '_blank', 'noopener');
+        } else if (thumb.dataset.live){
+          window.open(thumb.dataset.live, '_blank', 'noopener');
+        }
+      }
+    }
+
+    // attach to both containers
+    gallery && gallery.addEventListener('click', e => handleClick(e, gallery));
+    galleryLiveOnly && galleryLiveOnly.addEventListener('click', e => handleClick(e, galleryLiveOnly));
+
+    function openLink(url){ if (url) window.open(url,'_blank','noopener'); else alert('Link not provided.'); }
+
+    function openPreview(thumbEl, card){
+      if (!thumbEl) return;
+      const img = thumbEl.querySelector('img');
+      modalImg.src = img ? img.src : '';
+      modalTitle.textContent = card.querySelector('.title')?.textContent || 'Project preview';
+      // description: include which links are available
+      const hasFigma = !!thumbEl.dataset.figma;
+      const hasLive = !!thumbEl.dataset.live;
+      modalDesc.textContent = `Role: UI/UX designer — Tools: Figma, Photoshop — Links available: ${hasFigma ? 'Figma ' : ''}${hasLive ? 'Live' : ''}`.trim();
+
+      modalFigma.href = thumbEl.dataset.figma || '#';
+      modalFigma.style.display = hasFigma ? 'inline-block' : 'none';
+
+      modalLive.href = thumbEl.dataset.live || '#';
+      modalLive.style.display = hasLive ? 'inline-block' : 'none';
+
+      modal.classList.add('open');
+    }
+
+    modalClose.addEventListener('click', ()=> modal.classList.remove('open'));
+    modal.addEventListener('click', (ev)=>{ if (ev.target === modal) modal.classList.remove('open'); });
+
+    // Accessibility: allow Esc to close
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('open'); });
+  </script>
+</body>
+</html>
