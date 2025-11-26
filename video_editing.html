@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Video Editing Work — Mohit Singh</title>
+  <style>
+    :root{
+      --bg:#050505;
+      --card:#0f1720;
+      --muted:#9aa4af;
+      --accent:#ff2e6d;
+      --glass: rgba(255,255,255,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{
+      background:radial-gradient(circle at top,#141414 0,#050505 55%);
+      color:#e6eef6;
+      padding:40px 16px 80px;
+    }
+    .page{
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    /* top bar */
+    .top-bar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:26px;
+    }
+    .top-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:#fff;
+    }
+    .top-brand img{
+      width:120px;
+      filter:drop-shadow(0 0 10px #ff9100);
+    }
+    .top-nav{
+      display:flex;
+      gap:12px;
+      font-size:14px;
+    }
+    .top-nav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid transparent;
+    }
+    .top-nav a:hover{
+      border-color:rgba(255,255,255,0.12);
+      color:#fff;
+    }
+
+    h1{font-size:26px;margin:0 0 6px}
+    p.lead{margin:0 0 22px;color:var(--muted);max-width:640px;font-size:14px}
+
+    /* gallery */
+    .gallery{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:18px;
+    }
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.4));
+      border-radius:14px;
+      padding:10px;
+      border:1px solid rgba(255,255,255,0.06);
+      box-shadow:0 10px 25px rgba(0,0,0,0.7);
+    }
+    .thumb-wrap{
+      position:relative;
+      border-radius:10px;
+      overflow:hidden;
+      cursor:pointer;
+    }
+    .thumb-wrap img{
+      width:100%;
+      height:210px;
+      display:block;
+      object-fit:cover;
+      transition:transform .35s ease, opacity .35s ease;
+    }
+    .thumb-wrap::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top,rgba(0,0,0,0.6),transparent 40%);
+      opacity:.7;
+      pointer-events:none;
+    }
+    .thumb-play{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,0.8);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      backdrop-filter:blur(4px);
+    }
+    .thumb-play span{
+      margin-left:3px;
+    }
+    .thumb-badge{
+      position:absolute;
+      color: #fff;
+      left:10px;
+      bottom:10px;
+      padding:4px 9px;
+      font-size:11px;
+      border-radius:999px;
+      background:rgba(0,0,0,0.7);
+      border:1px solid rgba(255,255,255,0.22);
+    }
+    .thumb-wrap:hover img{
+      transform:scale(1.04);
+      opacity:0.9;
+    }
+
+    .card h3{
+      margin:10px 2px 4px;
+      font-size:15px;
+    }
+    .card p{
+      margin:0 2px 10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .card .meta-bottom{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .btn-small{
+      padding:6px 10px;
+      border-radius:999px;
+      border:none;
+      font-size:11px;
+      cursor:pointer;
+      background:var(--glass);
+      color:#e6eef6;
+    }
+    .btn-small.primary{
+      background:linear-gradient(90deg,#ff7a9a,#ff2e6d);
+      box-shadow:0 6px 18px rgba(255,46,109,0.35);
+    }
+    /* bottom banner */
+    .bottom-banner{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:18px;
+      z-index:210;
+      background:linear-gradient(90deg, rgba(255,46,109,0.12), rgba(255,127,154,0.06));
+      padding:14px 22px;
+      border-radius:12px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      border:1px solid rgba(255,46,109,0.08);
+      text-align:center;
+      font-weight:800;
+      color:#fff;
+      font-size:clamp(14px,2.5vw,20px);
+      letter-spacing:0.2px;
+    }
+
+    /* mobile tweaks */
+    @media (max-width:640px){
+      body{padding:20px 10px 80px;}
+      .top-bar{flex-direction:column;align-items:flex-start}
+      .top-nav{flex-wrap:wrap}
+      h1{font-size:22px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- top bar with logo + nav -->
+    <header class="top-bar">
+      <a href="index.html" class="top-brand">
+        <img src="images/logo.png" alt="Mohit logo">
+      </a>
+      <nav class="top-nav">
+        <a href="index.html">Home</a>
+        <a href="ui_ux.html">UI/UX Work</a>
+        <a href="video_editing.html" style="color:#fff;border-color:rgba(255,255,255,0.3);">Video Editing</a>
+        <a href="https://www.behance.net/gallery/216751195/Blender-Mohi?tracking_source=project_owner_other_projects">3D Designs</a>
+        <a href="https://www.behance.net/gallery/220256205/Interior-Design-Portfolio">Interior</a>
+      </nav>
+    </header>
+
+    <main>
+      <h1>Video Editing Work</h1>
+      <p class="lead">
+        A curated collection of my video edits. Click any thumbnail to directly open the
+        YouTube or Instagram post in a new tab.
+      </p>
+
+      <section class="gallery">
+        <!-- CARD 1 -->
+        <article class="card">
+          <a class="thumb-wrap"
+             href="https://www.youtube.com/@AkshayFITT"
+             target="_blank" rel="noopener">
+            <img src="img_video/v1.png" alt="Cinematic product edit thumbnail">
+            <div class="thumb-play"><span>▶</span></div>
+            <div class="thumb-badge">YouTube</div>
+          </a>
+          <h3>Cinematic Product Edit</h3>
+          <p>High–energy product showcase with sound–synced cuts and speed ramps.</p>
+          <div class="meta-bottom">
+            <span>Premiere Pro • After Effects</span>
+            <a href="https://www.youtube.com/@AkshayFITT"
+               target="_blank" rel="noopener">
+              <button class="btn-small primary">Watch</button>
+            </a>
+          </div>
+        </article>
+
+        <!-- CARD 2 -->
+        <article class="card">
+          <a class="thumb-wrap"
+             href="https://www.instagram.com/daadis.in?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+             target="_blank" rel="noopener">
+            <img src="img_video/v2.png" alt="Instagram reel edit thumbnail">
+            <div class="thumb-play"><span>▶</span></div>
+            <div class="thumb-badge">Instagram</div>
+          </a>
+          <h3>Short-form Reel Edit</h3>
+          <p>Fast cuts, transitions and text animations designed for Instagram Reels.</p>
+          <div class="meta-bottom">
+            <span>Reels • Vertical</span>
+            <a href="https://www.instagram.com/daadis.in?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+               target="_blank" rel="noopener">
+              <button class="btn-small primary">View Reel</button>
+            </a>
+          </div>
+        </article>
+
+        <!-- CARD 3 -->
+        <article class="card">
+          <a class="thumb-wrap"
+             href="https://www.instagram.com/kultivatedkarats?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+             target="_blank" rel="noopener">
+            <img src="img_video/v3.png" alt="Instagram reel edit thumbnail">
+            <div class="thumb-play"><span>▶</span></div>
+            <div class="thumb-badge">Instagram</div>
+          </a>
+          <h3>Short-form Reel Edit</h3>
+          <p>Fast cuts, transitions and text animations designed for Instagram Reels.</p>
+          <div class="meta-bottom">
+            <span>Reels • Vertical</span>
+            <a href="https://www.instagram.com/kultivatedkarats?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+               target="_blank" rel="noopener">
+              <button class="btn-small primary">View Reel</button>
+            </a>
+          </div>
+        </article>
+
+        <!-- add more cards by copying any article block above -->
+      </section>
+      <section class="gallery">
+        <!-- CARD 4 -->
+        <article class="card">
+          <a class="thumb-wrap"
+             href="https://www.youtube.com/@adrijasinghh"
+             target="_blank" rel="noopener">
+            <img src="img_video/v4.png" alt="Cinematic product edit thumbnail">
+            <div class="thumb-play"><span>▶</span></div>
+            <div class="thumb-badge">YouTube</div>
+          </a>
+          <h3>Cinematic Product Edit</h3>
+          <p>High–energy product showcase with sound–synced cuts and speed ramps.</p>
+          <div class="meta-bottom">
+            <span>Premiere Pro • After Effects</span>
+            <a href="https://www.youtube.com/@adrijasinghh"
+               target="_blank" rel="noopener">
+              <button class="btn-small primary">Watch</button>
+            </a>
+          </div>
+        </article>
+
+        <!-- CARD 5 -->
+        <article class="card">
+          <a class="thumb-wrap"
+             href="https://www.instagram.com/adrijaasinghh?igshid=OGQ5ZDc2ODk2ZA%3D%3D"
+             target="_blank" rel="noopener">
+            <img src="img_video/v4.png" alt="Instagram reel edit thumbnail">
+            <div class="thumb-play"><span>▶</span></div>
+            <div class="thumb-badge">Instagram</div>
+          </a>
+          <h3>Short-form Reel Edit</h3>
+          <p>Fast cuts, transitions and text animations designed for Instagram Reels.</p>
+          <div class="meta-bottom">
+            <span>Reels • Vertical</span>
+            <a href="https://www.instagram.com/adrijaasinghh?igshid=OGQ5ZDc2ODk2ZA%3D%3D"
+               target="_blank" rel="noopener">
+              <button class="btn-small primary">View Reel</button>
+            </a>
+          </div>
+        </article>
+
+        <!-- CARD 6 -->
+        <article class="card">
+          <a class="thumb-wrap"
+             href="https://www.instagram.com/vardhmanjewels1985/"
+             target="_blank" rel="noopener">
+            <img src="img_video/v6.png" alt="Instagram reel edit thumbnail">
+            <div class="thumb-play"><span>▶</span></div>
+            <div class="thumb-badge">Instagram</div>
+          </a>
+          <h3>Short-form Reel Edit</h3>
+          <p>Fast cuts, transitions and text animations designed for Instagram Reels.</p>
+          <div class="meta-bottom">
+            <span>Reels • Vertical</span>
+            <a href="https://www.instagram.com/vardhmanjewels1985/"
+               target="_blank" rel="noopener">
+              <button class="btn-small primary">View Reel</button>
+            </a>
+          </div>
+        </article>
+
+        <!-- add more cards by copying any article block above -->
+      </section>
+      <section class="gallery">
+        <!-- CARD 7 -->
+        <article class="card">
+          <a class="thumb-wrap"
+             href="https://www.youtube.com/@verbattle"
+             target="_blank" rel="noopener">
+            <img src="img_video/v7.jpg" alt="Cinematic product edit thumbnail">
+            <div class="thumb-play"><span>▶</span></div>
+            <div class="thumb-badge">YouTube</div>
+          </a>
+          <h3>Cinematic Product Edit</h3>
+          <p>High–energy product showcase with sound–synced cuts and speed ramps.</p>
+          <div class="meta-bottom">
+            <span>Premiere Pro • After Effects</span>
+            <a href="https://www.youtube.com/@verbattle"
+               target="_blank" rel="noopener">
+              <button class="btn-small primary">Watch</button>
+            </a>
+          </div>
+        </article>
+
+        <!-- CARD 8 -->
+        <article class="card">
+          <a class="thumb-wrap"
+             href="https://www.instagram.com/arohance/"
+             target="_blank" rel="noopener">
+            <img src="img_video/v8.png" alt="Instagram reel edit thumbnail">
+            <div class="thumb-play"><span>▶</span></div>
+            <div class="thumb-badge">Instagram</div>
+          </a>
+          <h3>Short-form Reel Edit</h3>
+          <p>Fast cuts, transitions and text animations designed for Instagram Reels.</p>
+          <div class="meta-bottom">
+            <span>Reels • Vertical</span>
+            <a href="https://www.instagram.com/arohance/"
+               target="_blank" rel="noopener">
+              <button class="btn-small primary">View Reel</button>
+            </a>
+          </div>
+        </article>
+
+        <!-- CARD 9 -->
+        <article class="card">
+          <a class="thumb-wrap"
+             href="https://www.instagram.com/storiesbyarohance/"
+             target="_blank" rel="noopener">
+            <img src="img_video/v9.png" alt="Instagram reel edit thumbnail">
+            <div class="thumb-play"><span>▶</span></div>
+            <div class="thumb-badge">Instagram</div>
+          </a>
+          <h3>Short-form Reel Edit</h3>
+          <p>Fast cuts, transitions and text animations designed for Instagram Reels.</p>
+          <div class="meta-bottom">
+            <span>Reels • Vertical</span>
+            <a href="https://www.instagram.com/storiesbyarohance/"
+               target="_blank" rel="noopener">
+              <button class="btn-small primary">View Reel</button>
+            </a>
+          </div>
+        </article>
+
+        <!-- add more cards by copying any article block above -->
+      </section>
+      <div class="bottom-banner">Completed over 10K+ Projects — contact to know more</div>
+    </main>
+  </div>
+</body>
+</html>
