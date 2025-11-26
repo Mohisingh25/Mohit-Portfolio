@@ -7,14 +7,54 @@
   <style>
     :root{ --bg:#050505; --card:#0f1720; --muted:#9aa4af; --accent:#ff2e6d; --glass: rgba(255,255,255,0.04)}
     html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
-    body{background:linear-gradient(180deg,#000103 0%, #090404 0%);color:#e6eef6;padding:40px;padding-bottom:140px}
+    body{background:linear-gradient(180deg,#000103 0%, #090404 0%);color:#e6eef6;padding:40px 16px;padding-bottom:140px}
     .section{max-width:1200px;margin:0 auto}
     h2{font-size:38px;margin:0 0 18px;color: #ff2e6d;}
     p.lead{color:var(--muted);margin:6px 0 24px}
 
+    /* top bar (same as video page) */
+    .top-bar{
+      max-width:1200px;
+      margin:0 auto 26px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    .top-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:#fff;
+    }
+    .top-brand img{
+      width:120px;
+      filter:drop-shadow(0 0 10px #ff9100);
+    }
+    .top-nav{
+      display:flex;
+      gap:12px;
+      font-size:14px;
+    }
+    .top-nav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid transparent;
+    }
+    .top-nav a:hover{
+      border-color:rgba(255,255,255,0.12);
+      color:#fff;
+    }
+
     /* layout columns */
     .columns{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
-    @media (max-width:1000px){ .columns{grid-template-columns:1fr} }
+    @media (max-width:1000px){
+      .columns{grid-template-columns:1fr}
+      .top-bar{flex-direction:column;align-items:flex-start;padding-inline:0;}
+    }
 
     /* gallery grid */
     .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
@@ -72,11 +112,20 @@
   </style>
 </head>
 <body>
-  <!-- Home Logo (uses uploaded local path) -->
-  <a href="index.html" style="position:fixed; top:20px; left:20px; z-index:200; display:flex; align-items:center; gap:8px; text-decoration:none;">
-    <img src="images/logo.png" alt="Mohit Logo" style="width: 150px; /* Adjust as needed */
-   filter: drop-shadow(0 0 10px #ff9100);">
-  </a>
+  <!-- Top navigation (same style as video.html) -->
+  <header class="top-bar">
+    <a href="index.html" class="top-brand">
+      <img src="images/logo.png" alt="Mohit Logo">
+    </a>
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="ui_ux.html" style="color:#fff;border-color:rgba(255,255,255,0.3);">UI/UX Work</a>
+      <a href="video_editing.html">Video Editing</a>
+       <a href="https://www.behance.net/gallery/216751195/Blender-Mohi?tracking_source=project_owner_other_projects">3D Designs</a>
+        <a href="https://www.behance.net/gallery/220256205/Interior-Design-Portfolio">Interior</a>
+      </nav>
+    </nav>
+  </header>
 
   <section class="section">
     <h2>UI / UX Work</h2>
@@ -282,7 +331,6 @@
       const figmaLogo = e.target.closest('.figma-logo');
 
       if (figmaLogo){
-        // find card, open its figma (if present)
         const card = figmaLogo.closest('.card');
         const thumbEl = card.querySelector('.thumb');
         const url = thumbEl && thumbEl.dataset.figma;
@@ -300,7 +348,6 @@
       }
 
       if (thumb){
-        // If thumb has figma -> open figma, else open live if present
         if (thumb.dataset.figma){
           window.open(thumb.dataset.figma, '_blank', 'noopener');
         } else if (thumb.dataset.live){
@@ -320,7 +367,6 @@
       const img = thumbEl.querySelector('img');
       modalImg.src = img ? img.src : '';
       modalTitle.textContent = card.querySelector('.title')?.textContent || 'Project preview';
-      // description: include which links are available
       const hasFigma = !!thumbEl.dataset.figma;
       const hasLive = !!thumbEl.dataset.live;
       modalDesc.textContent = `Role: UI/UX designer — Tools: Figma, Photoshop — Links available: ${hasFigma ? 'Figma ' : ''}${hasLive ? 'Live' : ''}`.trim();
@@ -337,7 +383,6 @@
     modalClose.addEventListener('click', ()=> modal.classList.remove('open'));
     modal.addEventListener('click', (ev)=>{ if (ev.target === modal) modal.classList.remove('open'); });
 
-    // Accessibility: allow Esc to close
     document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('open'); });
   </script>
 </body>
