@@ -8,8 +8,16 @@
     <link rel="stylesheet"  href="style.css">
     <script src="https://kit.fontawesome.com/c92cddcd18.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
 <div id="header">
+
+    <!-- Background video -->
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="images/Backgv.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
     <div class="container">
         <nav>
             <img src="images/logo.png" class="logo">
@@ -73,8 +81,8 @@ Fueled by curiosity and a drive for innovation, I constantly strive to push crea
                     </ul>
                 </div>
                 <div class="tab-contents" id="experience">
-                    <ul><li><span>2025 - Current</span><br> CMO & CIO (UI/UX Designer) @ Arohance - Tech & Marketing| The Freelancer"</li>
-                        <li><span>2024 - 2025</span><br> 3D designer, Video Editing and Photoshoot in studio -EvobiAutomations.PVT.LTD"</li>
+                    <ul>
+                        <li><span>2024 - Current</span><br> 3D designer, Video Editing and Photoshoot in studio -EvobiAutomations.PVT.LTD"</li>
                         <li><span>2023 - 2024</span><br> Figma App designer UI&UX -Evrfin.PVT.LTD </li>
                         <li><span>2022 - 2024</span><br> Running Educational Instute For the Students of class 3rd-12th as A Co-Founder (Teacher for 3d Designer and Subjects such as Maths,Science,SocialScience) We had Students around 50 with the different subjects for the different class - ApneTuitions </li>
                     </ul>
@@ -120,7 +128,7 @@ Fueled by curiosity and a drive for innovation, I constantly strive to push crea
                 <i class="fa-solid fa-code"></i>
                 <h2>Web Design</h2>
                 <p>A diverse collection of responsive and visually compelling web designs focused on enhancing user experience and meeting modern design standards. Each design reflects creativity, functionality, and attention to detail.</p>
-                <a href="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzN5OHR0OWY3dGc0ZDRmZXcxYW04ZGpsMmZ1bzU2YXk4aHAyZzBkYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1Or4ky3ZPIRerQMRe7/giphy.gif">Learn more</a>
+                <a href="ui_ux.html/">Learn more</a>
             </div>
             <div>
                 <i class="fa-solid fa-crop"></i>
@@ -134,6 +142,13 @@ Fueled by curiosity and a drive for innovation, I constantly strive to push crea
                 <p>A curated collection of 3D animations highlighting dynamic motion, fluid transitions, and storytelling through visual effects. These animations demonstrate expertise in rigging, keyframe animation, and physics simulations.</p>
                 <a href="https://www.behance.net/gallery/216751195/Blender-Mohi">Learn more</a>
             </div>
+            <div>
+                <i class="fa-solid fa-code"></i>
+                <h2>Video Editing</h2>
+                <p>A diverse collection of responsive and visually compelling web designs focused on Cinimatic and meeting modern design standards. Each design reflects creativity, functionality, and attention to detail.</p>
+                <a href="video_editing.html">Learn more</a>
+            </div>
+           
         </div>
     </div>
 </div>
@@ -162,8 +177,16 @@ Fueled by curiosity and a drive for innovation, I constantly strive to push crea
                 <img src="images/work-3.png">
                 <div class="layer">
                     <h3>UI and UX</h3>
-                    <p></p>
-                    <a href="ui_ux.html"></i></a>
+                    <p>This area is currently under development. I am in the process of uploading and showcasing my latest work, including 3D renders, animations, and web design projects. Please check back soon to explore the full range of my creative projects!</p>
+                    <a href="ui_ux.html"><i class="fa-solid fa-link"></i></a>
+                </div>
+            </div>
+            <div class="work">
+                <img src="images/work-4.png">
+                <div class="layer">
+                    <h3>Video Editing</h3>
+                    <p>Click here to check my Video Editing work</p>
+                    <a href="video_editing.html"><i class="fa-solid fa-link"></i></a>
                 </div>
             </div>
         </div>
@@ -213,11 +236,7 @@ Fueled by curiosity and a drive for innovation, I constantly strive to push crea
     </div>
 </div>
 
-
-
-
 <script>
-
     var tablinks = document.getElementsByClassName("tab-links");
     var tabcontents = document.getElementsByClassName("tab-contents");
 
@@ -234,7 +253,6 @@ Fueled by curiosity and a drive for innovation, I constantly strive to push crea
 </script>
 
 <script>
-
     var sidemenu = document.getElementById("sidemenu");
 
     function openmenu(){
@@ -243,8 +261,8 @@ Fueled by curiosity and a drive for innovation, I constantly strive to push crea
     function closemenu(){
         sidemenu.style.right = "-200px";
     }
-
 </script>
+
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzzUo8daxG48SkXRe8MV50o8_F6oW42Ttx9IfOFFaFszJz4BRmvXPDsMp7bnzrA_cv7zw/exec'
     const form = document.forms['submit-to-google-sheet']
@@ -262,28 +280,26 @@ Fueled by curiosity and a drive for innovation, I constantly strive to push crea
         })
         .catch(error => console.error('Error!', error.message))
     })
-  </script>
-  <script>
+</script>
+
+<script>
     window.addEventListener('scroll', () => {
-    const header = document.getElementById('header');
-    const scrollY = window.scrollY;
+        const header = document.getElementById('header');
+        const scrollY = window.scrollY;
 
-    // Adjust the background position to create the parallax effect
-    header.style.backgroundPosition = `center ${scrollY * 0.5}px`;
+        // Parallax-like effect for background position (kept, harmless even with video)
+        header.style.backgroundPosition = `center ${scrollY * 0.5}px`;
 
-    // Optionally, hide the header after scrolling down completely
-    if (scrollY > window.innerHeight) {
-        header.style.opacity = 0; // Fades out the header
-        header.style.pointerEvents = 'none'; // Prevent interaction when hidden
-    } else {
-        header.style.opacity = 1;
-        header.style.pointerEvents = 'auto';
-    }
-});
+        // Hide header after scrolling past first viewport
+        if (scrollY > window.innerHeight) {
+            header.style.opacity = 0;
+            header.style.pointerEvents = 'none';
+        } else {
+            header.style.opacity = 1;
+            header.style.pointerEvents = 'auto';
+        }
+    });
+</script>
 
-  </script>
-</body>
 </body>
 </html>
-
-
