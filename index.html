@@ -722,10 +722,11 @@ html[data-stock="trix"] .card:hover .im img{filter:var(--film)}
 
 <script>
 window.MUSIC = [
-  {id:'EjOrKketwTo', title:'Ek Garam Chai Ki Pyali — Har Dil Jo Pyar Karega', len:'5:12'},
-  {id:'YoThngCrGGc', title:'Pehla Nasha — Jo Jeeta Wohi Sikandar',           len:'4:51'},
-  {id:'XuCp0r3vhPQ', title:'Chura Liya Hai Tumne Jo Dil Ko — Yaadon Ki Baaraat', len:'4:29'},
-  {id:'LBmX4Y3lWGg', title:'Ek Garam Chai Ki Pyali (Remix)',                 len:'4:34'}
+  {url:'https://www.youtube.com/watch?v=yIzCBU0_LyY&list=RDyIzCBU0_LyY&start_radio=1', title:'Song 1'},
+  {url:'https://www.youtube.com/watch?v=_R7Po4Wpbj8&list=RD_R7Po4Wpbj8&start_radio=1', title:'Song 2'},
+  {url:'https://www.youtube.com/watch?v=L4_b0ulPqdo&list=RDL4_b0ulPqdo&start_radio=1', title:'Song 3'},
+  {url:'https://www.youtube.com/watch?v=VueN49P7JyU&list=RDVueN49P7JyU&start_radio=1', title:'Song 4'},
+  {url:'https://www.youtube.com/watch?v=ulEiyaxHx4s&list=RDulEiyaxHx4s&start_radio=1', title:'Song 5'}
 ];
 </script>
 
@@ -1301,7 +1302,26 @@ if(FINE && !RM){
 
 /* ---------- 15. MUSIC PLAYER (YouTube-backed) ---------- */
 if (Array.isArray(window.MUSIC) && window.MUSIC.length) (function(){
-  const TRACKS = window.MUSIC;
+  function extractYouTubeId(value){
+    if(!value) return '';
+    const s=String(value).trim();
+    if(/^[A-Za-z0-9_-]{11}$/.test(s)) return s;
+    try{
+      const u=new URL(s);
+      if(u.hostname.includes('youtu.be')) return u.pathname.split('/').filter(Boolean)[0]||'';
+      if(u.hostname.includes('youtube.com')){
+        const v=u.searchParams.get('v');
+        if(v) return v;
+        const parts=u.pathname.split('/').filter(Boolean);
+        const idx=parts.indexOf('shorts');
+        if(idx>=0 && parts[idx+1]) return parts[idx+1];
+        const eidx=parts.indexOf('embed');
+        if(eidx>=0 && parts[eidx+1]) return parts[eidx+1];
+      }
+    }catch(e){}
+    return '';
+  }
+  const TRACKS = window.MUSIC.map(t=>({...t,id:extractYouTubeId(t.url||t.link||t.id)})).filter(t=>t.id);
   const ICON = {
     play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
     pause:'<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
@@ -1333,7 +1353,7 @@ if (Array.isArray(window.MUSIC) && window.MUSIC.length) (function(){
             play:mp.querySelector('.play'),prev:mp.querySelector('.prev'),next:mp.querySelector('.next'),
             shuf:mp.querySelector('.shuf'),seek:mp.querySelector('.seek'),bar:mp.querySelector('.seek i')};
 
-  let i=0, yt=null, ready=false, shuffle=false, timer=null;
+  let i=Math.floor(Math.random()*TRACKS.length), yt=null, ready=false, shuffle=true, timer=null;
   let userPaused=false;
   try{ userPaused = localStorage.getItem('mp-paused')==='1'; }catch(e){}
 
@@ -1408,7 +1428,7 @@ if (Array.isArray(window.MUSIC) && window.MUSIC.length) (function(){
           // pointerdown / click / keydown / touchend actually grant that permission —
           // scroll and wheel do not — so we listen for all of them and only stop
           // listening once we've CONFIRMED the track is really playing with sound.
-          const GESTURES=['pointerdown','pointerup','click','keydown','touchend','touchstart','wheel','scroll'];
+          const GESTURES=['pointerdown','click','keydown','touchend','touchstart'];
           const withSound=()=>{ try{ return yt.getPlayerState()===1 && yt.isMuted()===false; }catch(e){ return false; } };
           const start=()=>{ try{ yt.unMute(); yt.setVolume(70); yt.playVideo(); }catch(e){} };
           const stopListening=()=>GESTURES.forEach(ev=>removeEventListener(ev,wake));
@@ -1450,7 +1470,7 @@ if (Array.isArray(window.MUSIC) && window.MUSIC.length) (function(){
     if(window.YT && window.YT.Player){ window.onYouTubeIframeAPIReady(); }
     else{
       const tag=document.createElement('script');
-      tag.src='';
+      tag.src='https://www.youtube.com/iframe_api';
       tag.onerror=()=>{ booting=false; dead(); };
       document.head.appendChild(tag);
     }
