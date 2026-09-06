@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI / UX Work — Mohit Singh</title>
+<meta name="description" content="Six shipped UI/UX case studies — Rosier Foods, Daadis, Arohance, Sweety Intimates, Bibox Exchange and Yudu Robotics.">
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#0B0B0F}
+:root{
+  --sk-bg:#0B0B0F; --sk-panel:#15151C; --sk-text:#F4F4F6;
+  --sk-muted:rgba(244,244,246,.72); --sk-faint:rgba(244,244,246,.46);
+  --sk-line:rgba(255,255,255,.10); --sk-line-2:rgba(255,255,255,.18);
+  --sk-chip:#F2E5CB; --sk-chipink:#1E120C; --sk-hard:#1E120C;
+  --mpa:#E9975E;
+  --sk-disp:'Fraunces',Georgia,serif;
+  --sk-sans:'DM Sans',system-ui,sans-serif;
+  --sk-mono:'Space Mono','SFMono-Regular',monospace;
+  --sk-ease:cubic-bezier(.22,1,.36,1);
+}
+
+/* ============================================================
+   SHARED CHROME — header + music player
+   Colours come from --sk-* / --mpa custom properties set below,
+   so this same block themes both work pages.
+   ============================================================ */
+.sk-nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.8rem clamp(1rem,3vw,2.2rem);
+  font-family:var(--sk-sans);
+  transition:background .45s,box-shadow .45s,backdrop-filter .45s;
+}
+.sk-nav.stuck{
+  background:color-mix(in srgb, var(--sk-bg) 86%, transparent);
+  backdrop-filter:blur(14px) saturate(130%);
+  box-shadow:0 1px 0 var(--sk-line);
+}
+.sk-nav a{text-decoration:none}
+.sk-brand{
+  display:flex;align-items:baseline;gap:.55rem;font-family:var(--sk-disp);
+  font-weight:600;font-size:1.28rem;letter-spacing:-.01em;color:var(--sk-text);
+  transition:opacity .25s;
+}
+.sk-brand:hover{opacity:.75}
+.sk-brand span{font-family:var(--sk-mono);font-size:.6rem;letter-spacing:.18em;color:var(--mpa);text-transform:uppercase}
+.sk-links{display:flex;gap:.1rem;align-items:center;flex-wrap:wrap}
+.sk-links a{
+  position:relative;font-family:var(--sk-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.55rem .8rem;color:var(--sk-muted);transition:color .3s;
+}
+.sk-links a::after{
+  content:'';position:absolute;left:.8rem;right:.8rem;bottom:.35rem;height:2px;
+  background:var(--mpa);transform:scaleX(0);transform-origin:left;transition:transform .38s var(--sk-ease);
+}
+.sk-links a:hover,.sk-links a.active{color:var(--sk-text)}
+.sk-links a:hover::after,.sk-links a.active::after{transform:scaleX(1)}
+.sk-cta{
+  font-family:var(--sk-mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.6rem 1.05rem;border:2px solid var(--sk-hard);background:var(--sk-chip);color:var(--sk-chipink);
+  box-shadow:3px 3px 0 var(--sk-hard);transition:transform .22s var(--sk-ease),box-shadow .22s,background .3s;
+}
+.sk-cta:hover{background:var(--mpa);color:var(--sk-chipink);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--sk-hard)}
+.sk-burger{display:none;width:42px;height:42px;border:2px solid var(--sk-line);background:none;cursor:pointer;align-items:center;justify-content:center}
+.sk-burger span{display:block;width:17px;height:2px;background:var(--sk-text);position:relative}
+.sk-burger span::before,.sk-burger span::after{content:'';position:absolute;left:0;width:17px;height:2px;background:var(--sk-text)}
+.sk-burger span::before{top:-6px}.sk-burger span::after{top:6px}
+@media(max-width:1000px){
+  .sk-links{
+    position:fixed;inset:0;height:100dvh;flex-direction:column;justify-content:center;gap:.4rem;
+    background:var(--sk-bg);transform:translateY(-102%);transition:transform .6s var(--sk-ease);z-index:199;
+  }
+  .sk-links.open{transform:none}
+  .sk-links a{font-family:var(--sk-disp);font-size:1.7rem;text-transform:none;letter-spacing:-.01em;color:var(--sk-text)}
+  .sk-links a::after{display:none}
+  .sk-burger{display:flex;position:relative;z-index:201}
+  .sk-cta{display:none}
+}
+
+/* ---------- back to top ---------- */
+#sktop{
+  position:fixed;right:clamp(.8rem,2vw,1.5rem);bottom:calc(clamp(.9rem,3vw,1.6rem) + 68px);z-index:130;
+  font-family:var(--sk-mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
+  padding:.65rem .85rem;border:2px solid var(--sk-hard);background:var(--sk-chip);color:var(--sk-chipink);
+  box-shadow:4px 4px 0 var(--sk-hard);
+  opacity:0;transform:translateY(14px);pointer-events:none;
+  transition:opacity .4s var(--sk-ease),transform .4s var(--sk-ease),background .3s;
+}
+#sktop.on{opacity:1;transform:none;pointer-events:auto}
+#sktop:hover{background:var(--mpa)}
+@media(max-width:860px){#sktop{display:none}}
+
+/* ============================================================
+   MUSIC PLAYER  (same player as the home page, themed here)
+   ============================================================ */
+#mp{
+  position:fixed;left:50%;bottom:clamp(.9rem,3vw,1.6rem);translate:-50% 0;z-index:135;
+  width:min(560px,calc(100vw - 2rem));
+  display:flex;align-items:center;gap:.85rem;
+  padding:.6rem .9rem .6rem .6rem;border-radius:999px;
+  background:color-mix(in srgb, var(--sk-panel) 90%, transparent);
+  backdrop-filter:blur(16px) saturate(140%);
+  border:1px solid var(--sk-line-2);
+  box-shadow:0 18px 44px -18px rgba(0,0,0,.92);
+  font-family:var(--sk-sans);
+  opacity:0;transform:translateY(24px);
+  transition:opacity .7s var(--sk-ease),transform .7s var(--sk-ease);
+}
+#mp.up{opacity:1;transform:none}
+#mp button{border:0;background:none;cursor:pointer;font:inherit}
+#mp .art{
+  position:relative;width:42px;height:42px;flex:none;border-radius:50%;overflow:hidden;
+  border:2px solid var(--mpa);background:var(--sk-bg);
+}
+#mp .art img{width:100%;height:100%;object-fit:cover}
+#mp.playing .art{animation:sk-spin 9s linear infinite}
+@keyframes sk-spin{to{transform:rotate(360deg)}}
+#mp .meta{flex:1 1 auto;min-width:0;text-align:left}
+#mp .meta b{
+  display:block;font-weight:500;font-size:.86rem;color:var(--sk-text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#mp .meta small{
+  display:block;font-family:var(--sk-mono);font-size:.58rem;letter-spacing:.1em;color:var(--sk-faint);
+  margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#mp .ctrl{display:flex;align-items:center;gap:.3rem;flex:none}
+#mp .ctrl button{
+  width:30px;height:30px;display:grid;place-items:center;border-radius:50%;
+  color:var(--sk-muted);transition:color .25s,background .25s,transform .2s var(--sk-ease);
+}
+#mp .ctrl button:hover{color:var(--sk-text);background:rgba(255,255,255,.09)}
+#mp .ctrl button.on{color:var(--mpa)}
+#mp .ctrl .play{
+  width:40px;height:40px;background:var(--sk-chip);color:var(--sk-chipink);border:2px solid var(--sk-hard);
+}
+#mp .ctrl .play:hover{background:var(--mpa);color:var(--sk-chipink);transform:scale(1.06)}
+#mp .ctrl svg{width:16px;height:16px;fill:currentColor}
+#mp .ctrl .play svg{width:15px;height:15px}
+#mp .seek{position:absolute;left:1rem;right:1rem;bottom:2px;height:8px;display:flex;align-items:center;cursor:pointer}
+#mp .seek::before{content:'';position:absolute;left:0;right:0;height:2px;background:rgba(255,255,255,.16);border-radius:2px}
+#mp .seek i{position:relative;display:block;height:2px;width:0;background:var(--mpa);border-radius:2px;transition:width .25s linear}
+#mp .eq{display:flex;align-items:flex-end;gap:2px;height:12px;flex:none}
+#mp .eq b{width:2px;height:4px;background:var(--mpa);border-radius:1px}
+#mp.playing .eq b{animation:sk-bounce .9s ease-in-out infinite}
+#mp.playing .eq b:nth-child(2){animation-delay:.15s}
+#mp.playing .eq b:nth-child(3){animation-delay:.3s}
+@keyframes sk-bounce{0%,100%{height:4px}50%{height:12px}}
+#mp.idle .ctrl .play{animation:sk-ring 2.2s ease-out infinite}
+@keyframes sk-ring{
+  0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--mpa) 55%,transparent)}
+  70%{box-shadow:0 0 0 14px transparent}
+  100%{box-shadow:0 0 0 0 transparent}
+}
+#mp.dead .eq,#mp.dead .seek{display:none}
+#mp .unmute{
+  position:absolute;top:-2.6rem;left:50%;translate:-50% 0;white-space:nowrap;cursor:pointer;
+  font-family:var(--sk-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--mpa);color:var(--sk-chipink);border:2px solid var(--sk-hard);padding:.42rem .8rem;
+  box-shadow:3px 3px 0 var(--sk-hard);animation:sk-nudge 1.8s ease-in-out infinite;display:none;
+}
+#mp.muted .unmute{display:block}
+#mp.dead.muted .unmute{display:none}
+@keyframes sk-nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+#yt{position:fixed;right:0;bottom:0;width:200px;height:113px;opacity:.001;pointer-events:none;z-index:1;border:0}
+
+@media(max-width:860px){
+  #mp{width:calc(100vw - 1.4rem);gap:.6rem;padding:.5rem .7rem .5rem .5rem}
+  #mp .meta small{display:none}
+  #mp .eq{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  #mp,#mp *{animation:none!important}
+}
+
+/* ---------- cross-page footer ---------- */
+.sk-foot{
+  border-top:1px solid var(--sk-line);padding:44px 0 120px;text-align:center;font-family:var(--sk-mono);
+  font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sk-faint);
+}
+.sk-foot a{color:var(--sk-muted);text-decoration:none;border-bottom:1px solid var(--sk-line-2);padding-bottom:2px;margin:0 .5rem;transition:color .25s,border-color .25s}
+.sk-foot a:hover{color:var(--mpa);border-color:var(--mpa)}
+
+
+.pw-root{
+  --pw-page:#0B0B0F;
+  --pw-line:rgba(255,255,255,.10);
+  --pw-fg:#F4F4F6;
+  --pw-fg-dim:rgba(244,244,246,.62);
+  --pw-fg-mute:rgba(244,244,246,.40);
+  --pw-radius:22px;
+  --pw-max:1240px;
+  --pw-ease:cubic-bezier(.22,.61,.36,1);
+  --pw-sans:'DM Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --pw-disp:'Fraunces',Georgia,serif;
+  --pw-mono:'Space Mono','SFMono-Regular',ui-monospace,Menlo,Consolas,monospace;
+  background:var(--pw-page);color:var(--pw-fg);font-family:var(--pw-sans);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+.pw-root *,.pw-root *::before,.pw-root *::after{box-sizing:border-box}
+.pw-root img{display:block;max-width:100%}
+.pw-root a{color:inherit;text-decoration:none}
+.pw-wrap{max-width:var(--pw-max);margin:0 auto;padding:0 28px}
+@media(max-width:640px){.pw-wrap{padding:0 18px}}
+.pw-eyebrow{font-family:var(--pw-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--pw-fg-mute);display:flex;align-items:center;gap:10px}
+.pw-eyebrow::before{content:'';width:26px;height:1px;background:currentColor;opacity:.6}
+.pw-eyebrow.center{justify-content:center}
+
+/* ============ INTRO ============ */
+.pw-intro{padding:150px 0 90px;position:relative}
+.pw-intro::after{content:'';position:absolute;inset:auto 0 0 0;height:1px;background:var(--pw-line)}
+.pw-intro-grid{display:grid;grid-template-columns:1.35fr .85fr;gap:64px;align-items:end}
+@media(max-width:900px){.pw-intro-grid{grid-template-columns:1fr;gap:40px}.pw-intro{padding:118px 0 60px}}
+.pw-h1{margin:26px 0 0;font-family:var(--pw-disp);font-size:clamp(44px,7.2vw,88px);line-height:.98;letter-spacing:-.03em;font-weight:600}
+.pw-h1 em{font-style:normal;color:var(--pw-fg-mute)}
+.pw-lede{margin:24px 0 0;font-size:17px;line-height:1.65;color:var(--pw-fg-dim);max-width:46ch}
+.pw-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--pw-line);border:1px solid var(--pw-line);border-radius:16px;overflow:hidden}
+.pw-stat{background:var(--pw-page);padding:22px 20px}
+.pw-stat b{display:block;font-size:30px;letter-spacing:-.03em;font-weight:600;line-height:1;color:#E9975E}
+.pw-stat span{display:block;margin-top:7px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--pw-fg-mute);font-family:var(--pw-mono)}
+
+/* ============ INDEX ============ */
+.pw-index{padding:34px 0 0;border-bottom:1px solid var(--pw-line)}
+.pw-chips{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:26px}
+.pw-chip{font-family:var(--pw-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  padding:9px 15px;border:1px solid var(--pw-line);border-radius:100px;color:var(--pw-fg-dim);
+  cursor:pointer;background:none;transition:.25s var(--pw-ease)}
+.pw-chip:hover{color:var(--pw-fg);border-color:rgba(255,255,255,.3)}
+.pw-chip[aria-pressed="true"]{background:var(--pw-fg);color:var(--pw-page);border-color:var(--pw-fg)}
+.pw-list{list-style:none;margin:0;padding:0 0 8px}
+.pw-list li{border-top:1px solid var(--pw-line)}
+.pw-list li:first-child{border-top:0}
+.pw-list a{display:grid;grid-template-columns:56px 1.1fr 1fr auto;gap:20px;align-items:center;padding:20px 4px;transition:.3s var(--pw-ease)}
+.pw-list a:hover{padding-left:14px;background:linear-gradient(90deg,rgba(255,255,255,.04),transparent 70%)}
+.pw-list .n{font-family:var(--pw-mono);font-size:11px;color:var(--pw-fg-mute)}
+.pw-list .t{font-size:19px;letter-spacing:-.02em;font-weight:500}
+.pw-list .c{font-size:13px;color:var(--pw-fg-dim)}
+.pw-list .arw{font-size:15px;color:var(--pw-fg-mute);transition:.3s var(--pw-ease)}
+.pw-list a:hover .arw{color:var(--pw-fg);transform:translateX(4px)}
+@media(max-width:760px){.pw-list a{grid-template-columns:40px 1fr auto;gap:14px}.pw-list .c{display:none}}
+
+/* ============ CASE ============ */
+.pw-case{--a:#888;--a2:#666;--band:#111;--ink:#fff;--soft:#222;--pg:#0d0d0d;
+  padding:110px 0 0;position:relative;border-top:1px solid var(--pw-line)}
+.pw-case:first-of-type{border-top:0}
+@media(max-width:900px){.pw-case{padding-top:74px}}
+.pw-case-head{display:grid;grid-template-columns:1fr auto;gap:36px;align-items:start}
+@media(max-width:760px){.pw-case-head{grid-template-columns:1fr;gap:24px}}
+.pw-num{font-family:var(--pw-mono);font-size:12px;letter-spacing:.2em;color:var(--a)}
+.pw-title{margin:16px 0 0;font-family:var(--pw-disp);font-size:clamp(34px,5.4vw,64px);line-height:1;letter-spacing:-.03em;font-weight:600}
+.pw-tagline{margin:14px 0 0;font-size:17px;color:var(--pw-fg-dim);max-width:44ch}
+.pw-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px}
+.pw-tag{font-family:var(--pw-mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  padding:6px 11px;border-radius:100px;border:1px solid color-mix(in srgb,var(--a) 42%,transparent);
+  color:color-mix(in srgb,var(--a) 78%,white);background:color-mix(in srgb,var(--a) 10%,transparent)}
+.pw-meta{display:grid;gap:14px;min-width:190px;margin:0}
+.pw-meta div{border-top:1px solid var(--pw-line);padding-top:10px}
+.pw-meta dt{font-family:var(--pw-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--pw-fg-mute)}
+.pw-meta dd{margin:5px 0 0;font-size:14px}
+.pw-root a.pw-visit{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font-size:13px;
+  color:var(--a);border-bottom:1px solid color-mix(in srgb,var(--a) 45%,transparent);padding-bottom:2px;transition:.25s var(--pw-ease)}
+.pw-root a.pw-visit:hover{gap:13px;border-color:var(--a)}
+
+.pw-stage{margin-top:52px;border-radius:var(--pw-radius);padding:52px 52px 0;position:relative;overflow:hidden;
+  background:radial-gradient(120% 90% at 78% 0%, color-mix(in srgb,var(--a) 26%,transparent) 0%, transparent 62%),
+             linear-gradient(180deg, var(--band) 0%, color-mix(in srgb,var(--band) 82%, var(--pg)) 100%);
+  border:1px solid color-mix(in srgb,var(--a) 22%,transparent)}
+@media(max-width:900px){.pw-stage{padding:26px 18px 0;margin-top:34px}}
+.pw-stage-lab{position:absolute;top:20px;left:26px;font-family:var(--pw-mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:color-mix(in srgb,var(--ink) 45%,transparent);z-index:3}
+.pw-browser{border-radius:14px 14px 0 0;overflow:hidden;background:#fff;
+  box-shadow:0 -2px 0 rgba(0,0,0,.04),0 40px 80px -30px rgba(0,0,0,.55)}
+.pw-bar{display:flex;align-items:center;gap:8px;padding:11px 14px;background:#EDEDF0;border-bottom:1px solid rgba(0,0,0,.07)}
+.pw-dots{display:flex;gap:6px}
+.pw-dots i{width:10px;height:10px;border-radius:50%;display:block}
+.pw-dots i:nth-child(1){background:#FF5F57}.pw-dots i:nth-child(2){background:#FEBC2E}.pw-dots i:nth-child(3){background:#28C840}
+.pw-url{flex:1;margin-left:8px;background:#fff;border-radius:7px;padding:5px 12px;
+  font-family:var(--pw-mono);font-size:10.5px;color:#5A5A66;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.pw-shot{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:top center;background:var(--soft)}
+@media(max-width:760px){.pw-shot{aspect-ratio:16/11}}
+
+/* css-drawn mock for the image-less site */
+.pw-mock{background:#000;aspect-ratio:16/9;position:relative;display:grid;place-items:center;overflow:hidden}
+.pw-mock::before{content:'';position:absolute;width:52%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--a) 55%,transparent) 0%,transparent 66%);filter:blur(38px)}
+.pw-mock-in{position:relative;text-align:center;padding:0 24px}
+.pw-mock-mark{display:block;margin:0 auto 20px;font-family:var(--pw-disp);font-size:clamp(20px,2.4vw,30px);
+  font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  background:linear-gradient(92deg,var(--a),#fff 50%,var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 22px color-mix(in srgb,var(--a) 70%,transparent))}
+.pw-mock h4{margin:0;font-family:var(--pw-disp);font-size:clamp(24px,3.2vw,42px);letter-spacing:-.03em;font-weight:600;color:#fff}
+.pw-mock p{margin:12px 0 0;font-size:13px;color:rgba(255,255,255,.55)}
+.pw-mock-cta{display:inline-block;margin-top:20px;padding:10px 22px;border-radius:100px;font-size:12px;
+  background:linear-gradient(90deg,var(--a),var(--a2));color:#fff;font-weight:500}
+.pw-mock-nav{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;font-size:11px;color:rgba(255,255,255,.6)}
+.pw-mock-nav span{display:flex;gap:16px}
+
+.pw-body{display:grid;grid-template-columns:1fr 1fr;gap:62px;padding:64px 0 0}
+@media(max-width:900px){.pw-body{grid-template-columns:1fr;gap:38px;padding-top:42px}}
+.pw-blk h3{margin:0 0 14px;font-family:var(--pw-mono);font-size:11px;letter-spacing:.19em;text-transform:uppercase;color:var(--a)}
+.pw-blk p{margin:0 0 16px;color:var(--pw-fg-dim);font-size:15.5px;line-height:1.72}
+.pw-blk p:last-child{margin-bottom:0}
+.pw-moves{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.pw-moves li{border-left:2px solid color-mix(in srgb,var(--a) 40%,transparent);padding:4px 0 20px 20px}
+.pw-moves li:last-child{padding-bottom:0}
+.pw-moves b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-.01em;color:var(--pw-fg);margin-bottom:6px}
+.pw-moves span{display:block;font-size:14.5px;line-height:1.68;color:var(--pw-fg-dim)}
+
+.pw-specs{display:grid;grid-template-columns:1.15fr .85fr 1fr;gap:1px;margin-top:64px;
+  background:var(--pw-line);border:1px solid var(--pw-line);border-radius:18px;overflow:hidden}
+@media(max-width:900px){.pw-specs{grid-template-columns:1fr;margin-top:44px}}
+.pw-spec{background:var(--pw-page);padding:26px 24px}
+.pw-spec h4{margin:0 0 16px;font-family:var(--pw-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--pw-fg-mute)}
+.pw-sw{display:flex;flex-wrap:wrap;gap:10px}
+.pw-sw div{width:calc(20% - 8px);min-width:52px}
+.pw-sw i{display:block;height:44px;border-radius:9px;border:1px solid rgba(255,255,255,.12)}
+.pw-sw b{display:block;margin-top:7px;font-family:var(--pw-mono);font-size:9.5px;color:var(--pw-fg-dim)}
+.pw-sw em{display:block;font-style:normal;font-size:9.5px;color:var(--pw-fg-mute);margin-top:2px;line-height:1.3}
+.pw-ratio{margin-top:22px;display:flex;height:11px;border-radius:100px;overflow:hidden;border:1px solid rgba(255,255,255,.12)}
+.pw-ratio i{display:block;height:100%}
+.pw-ratio-lab{margin-top:10px;font-family:var(--pw-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--pw-fg-mute)}
+.pw-typerow{display:grid;gap:12px}
+.pw-typerow div{border-bottom:1px solid var(--pw-line);padding-bottom:11px}
+.pw-typerow div:last-child{border-bottom:0;padding-bottom:0}
+.pw-typerow b{display:block;font-size:21px;letter-spacing:-.02em;font-weight:500}
+.pw-typerow span{font-family:var(--pw-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pw-fg-mute)}
+.pw-secs{display:flex;flex-wrap:wrap;gap:6px}
+.pw-secs span{font-size:11.5px;padding:5px 10px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid var(--pw-line);color:var(--pw-fg-dim)}
+.pw-mets{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--pw-line);border:1px solid var(--pw-line);border-top:0;border-radius:0 0 18px 18px;overflow:hidden}
+@media(max-width:760px){.pw-mets{grid-template-columns:repeat(2,1fr)}}
+.pw-met{background:var(--pw-page);padding:22px}
+.pw-met b{display:block;font-size:26px;letter-spacing:-.03em;font-weight:600;color:var(--a);line-height:1}
+.pw-met span{display:block;margin-top:7px;font-family:var(--pw-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--pw-fg-mute)}
+.pw-case-foot{padding:0 0 106px}
+@media(max-width:900px){.pw-case-foot{padding-bottom:72px}}
+
+.pw-rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--pw-ease),transform .8s var(--pw-ease)}
+.pw-rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.pw-rv{opacity:1;transform:none;transition:none}}
+
+.pw-outro{border-top:1px solid var(--pw-line);padding:96px 0 40px;text-align:center}
+.pw-outro h2{margin:22px 0 0;font-family:var(--pw-disp);font-size:clamp(32px,5vw,54px);letter-spacing:-.03em;line-height:1.04;font-weight:600}
+.pw-outro p{margin:18px auto 0;max-width:48ch;color:var(--pw-fg-dim);font-size:16px}
+.pw-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.pw-root a.pw-btn{display:inline-block;padding:15px 30px;border-radius:100px;background:#F4F4F6;color:#0B0B0F;
+  font-size:14px;font-weight:600;transition:.28s var(--pw-ease)}
+.pw-root a.pw-btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px -14px rgba(255,255,255,.4)}
+.pw-root a.pw-btn.alt{background:transparent;color:#F4F4F6;border:1px solid var(--pw-line)}
+.pw-root a.pw-btn.alt:hover{border-color:#E9975E;color:#E9975E;box-shadow:none}
+
+</style>
+</head>
+<body>
+<script>
+window.MUSIC = [
+  {url:'https://www.youtube.com/watch?v=yIzCBU0_LyY&list=RDyIzCBU0_LyY&start_radio=1', title:'Song 1'},
+  {url:'https://www.youtube.com/watch?v=_R7Po4Wpbj8&list=RD_R7Po4Wpbj8&start_radio=1', title:'Song 2'},
+  {url:'https://www.youtube.com/watch?v=L4_b0ulPqdo&list=RDL4_b0ulPqdo&start_radio=1', title:'Song 3'},
+  {url:'https://www.youtube.com/watch?v=VueN49P7JyU&list=RDVueN49P7JyU&start_radio=1', title:'Song 4'},
+  {url:'https://www.youtube.com/watch?v=ulEiyaxHx4s&list=RDulEiyaxHx4s&start_radio=1', title:'Song 5'}
+];
+</script>
+
+<header class="sk-nav" id="skNav">
+  <a href="index.html" class="sk-brand">Mohit Singh <span>PM &middot; Design</span></a>
+  <nav class="sk-links" id="skLinks">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#services">What I do</a>
+    <a href="index.html#work">Work</a>
+    <a href="uiux-work.html" class="active">UI / UX</a>
+    <a href="graphics-work.html">Graphics</a>
+    <a href="index.html#journey">Journey</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+  <a href="index.html#contact" class="sk-cta">Let's talk</a>
+  <button class="sk-burger" id="skBurger" aria-label="Menu"><span></span></button>
+</header>
+
+<section class="pw-root" id="work">
+
+  <div class="pw-wrap pw-intro">
+    <div class="pw-intro-grid">
+      <div>
+        <div class="pw-eyebrow">Selected Work · 2025 — 2026</div>
+        <h1 class="pw-h1">Six brands.<br>Six problems.<br><em>Six systems.</em></h1>
+        <p class="pw-lede">End-to-end UI/UX — research, information architecture, design systems and shipped front-ends. Food D2C, fashion, agency, hardware and a crypto exchange. Each case below shows the problem, the decisions, and the interface those decisions produced.</p>
+      </div>
+      <div class="pw-stats">
+        <div class="pw-stat"><b>06</b><span>Live products</span></div>
+        <div class="pw-stat"><b>05</b><span>Industries</span></div>
+        <div class="pw-stat"><b>100%</b><span>Shipped, not concepts</span></div>
+        <div class="pw-stat"><b>Mobile</b><span>First, always</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pw-wrap pw-index">
+    <div class="pw-chips">
+      <button class="pw-chip" aria-pressed="true" data-f="all">All work</button>
+      <button class="pw-chip" aria-pressed="false" data-f="E-commerce">E-commerce</button><button class="pw-chip" aria-pressed="false" data-f="Agency">Agency</button><button class="pw-chip" aria-pressed="false" data-f="Fintech">Fintech</button><button class="pw-chip" aria-pressed="false" data-f="Hardware">Hardware</button>
+    </div>
+    <ul class="pw-list">
+      <li data-cat="E-commerce / D2C"><a href="#pw-rosier">
+        <span class="n">01</span><span class="t">Rosier Foods</span>
+        <span class="c">Heritage D2C food commerce</span><span class="arw">&#8594;</span></a></li>
+      <li data-cat="E-commerce / FMCG"><a href="#pw-daadis">
+        <span class="n">02</span><span class="t">Daadis</span>
+        <span class="c">Traditional sweets &amp; snacks, modernised</span><span class="arw">&#8594;</span></a></li>
+      <li data-cat="Agency / B2B"><a href="#pw-arohance">
+        <span class="n">03</span><span class="t">Arohance</span>
+        <span class="c">Tech-powered marketing agency</span><span class="arw">&#8594;</span></a></li>
+      <li data-cat="E-commerce / Fashion"><a href="#pw-sweety">
+        <span class="n">04</span><span class="t">Sweety Intimates</span>
+        <span class="c">Premium innerwear, built on fit</span><span class="arw">&#8594;</span></a></li>
+      <li data-cat="Fintech / Crypto"><a href="#pw-bibox">
+        <span class="n">05</span><span class="t">Bibox Exchange</span>
+        <span class="c">AI digital-asset trading platform</span><span class="arw">&#8594;</span></a></li>
+      <li data-cat="Hardware / D2C + Partner"><a href="#pw-yudu">
+        <span class="n">06</span><span class="t">Yudu Robotics</span>
+        <span class="c">Robots, drones &amp; 3D printers</span><span class="arw">&#8594;</span></a></li>
+    </ul>
+  </div>
+
+  
+<!-- ═══════════ 01 · Rosier Foods ═══════════ -->
+<article class="pw-case" id="pw-rosier" data-cat="E-commerce / D2C"
+  style="--a:#A66A2C;--a2:#2F4A32;--band:#F6F3E7;--ink:#2A1F14;--soft:#FFF2DE;--pg:#FEFDF7">
+  <div class="pw-wrap">
+    <header class="pw-case-head pw-rv">
+      <div>
+        <div class="pw-num">01 — E-commerce / D2C</div>
+        <h2 class="pw-title">Rosier Foods</h2>
+        <p class="pw-tagline">Heritage D2C food commerce</p>
+        <div class="pw-tags"><span class="pw-tag">UI/UX Design</span><span class="pw-tag">Design System</span><span class="pw-tag">Shopify Theme</span><span class="pw-tag">Conversion UX</span></div>
+      </div>
+      <dl class="pw-meta">
+        <div><dt>Year</dt><dd>2025 — 26</dd></div>
+        <div><dt>Discipline</dt><dd>E-commerce / D2C</dd></div>
+        <div><dt>Live site</dt><dd><a class="pw-visit" href="https://www.rosierfoods.com/" target="_blank" rel="noopener">www.rosierfoods.com <span>&#8599;</span></a></dd></div>
+      </dl>
+    </header>
+
+    <div class="pw-stage pw-rv">
+      <span class="pw-stage-lab">Live site</span>
+      <div class="pw-browser">
+        <div class="pw-bar"><div class="pw-dots"><i></i><i></i><i></i></div><div class="pw-url">www.rosierfoods.com</div></div>
+        <img class="pw-shot" src="img_ui/ui-rosier-desktop.jpg" alt="Rosier Foods — homepage hero" loading="lazy">
+      </div>
+    </div>
+
+    <div class="pw-body">
+      <div class="pw-blk pw-rv">
+        <h3>The brief &amp; the problem</h3>
+        <p>A heritage food brand with 40+ SKUs across ghee, atta, oils, pickles and breakfast was reading like a generic Shopify catalogue. Trust was the real conversion blocker — buyers wanted proof of purity before price.</p>
+        <h3 style="margin-top:34px">UI direction</h3>
+        <p>Cream ground, ghee-brown as the only saturated accent, and field green reserved for proof badges. Product photography sits on warm neutrals so every jar reads as the hero. Badge system (Best Seller, Trending, Must Try) is one shape, one size, colour-coded — so the grid scans in a single sweep instead of shouting.</p>
+      </div>
+      <div class="pw-blk pw-rv">
+        <h3>UX decisions that mattered</h3>
+        <ul class="pw-moves">
+          <li><b>Trust before price</b><span>Lab reports, sourcing and batch traceability were pulled out of the footer and placed inside the buying flow — a purity strip sits directly under the add-to-cart, not three clicks away.</span></li>
+          <li><b>Category rail as primary nav</b><span>Six pinned category chips (Ghee, Atta, Breakfast, Pickles, Oils, Immunity) replaced a deep mega-menu. Two taps to any SKU on mobile, where 78% of the traffic sits.</span></li>
+          <li><b>Bundles as a discovery surface</b><span>"Buy More. Save More." turned cross-sell into a browse pattern. Kitchen-intent bundles — Cooking Pack, Grandma's Kitchen Essentials — beat discount-first merchandising on AOV.</span></li>
+          <li><b>Bilingual voice</b><span>Devanagari runs alongside English in the story band. It is not decoration — it is the register the audience actually buys in.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pw-specs pw-rv">
+      <div class="pw-spec">
+        <h4>Colour system</h4>
+        <div class="pw-sw"><div><i style="background:#A66A2C"></i><b>#A66A2C</b><em>Ghee Brown</em></div><div><i style="background:#F6F3E7"></i><b>#F6F3E7</b><em>Khadi Cream</em></div><div><i style="background:#2F4A32"></i><b>#2F4A32</b><em>Field Green</em></div><div><i style="background:#FFF2DE"></i><b>#FFF2DE</b><em>Ghee Glow</em></div><div><i style="background:#2A1F14"></i><b>#2A1F14</b><em>Ink</em></div></div>
+        <div class="pw-ratio"><i style="background:#A66A2C;flex:16"></i><i style="background:#F6F3E7;flex:40"></i><i style="background:#2F4A32;flex:7"></i><i style="background:#FFF2DE;flex:12"></i><i style="background:#2A1F14;flex:25"></i></div>
+        <div class="pw-ratio-lab">Applied ratio across the page</div>
+      </div>
+      <div class="pw-spec">
+        <h4>Typography</h4>
+        <div class="pw-typerow"><div><b>Aa</b><span>M-Heading-Font</span></div><div><b>Aa</b><span>Poppins</span></div><div><b>Aa</b><span>Devanagari support</span></div></div>
+      </div>
+      <div class="pw-spec">
+        <h4>Page architecture</h4>
+        <div class="pw-secs"><span>Sticky category rail</span><span>Hero carousel</span><span>Loved Across Generations</span><span>Buy More. Save More.</span><span>Brand story</span><span>Five pillars</span><span>Reviews wall</span><span>Editorial grid</span></div>
+      </div>
+    </div>
+    <div class="pw-mets pw-rv">
+      <div class="pw-met"><b>40+</b><span>SKUs</span></div><div class="pw-met"><b>6</b><span>Category rails</span></div><div class="pw-met"><b>2 taps</b><span>To any product</span></div><div class="pw-met"><b>Mobile-first</b><span>78% traffic</span></div>
+    </div>
+  </div>
+  <div class="pw-case-foot"></div>
+</article>
+
+<!-- ═══════════ 02 · Daadis ═══════════ -->
+<article class="pw-case" id="pw-daadis" data-cat="E-commerce / FMCG"
+  style="--a:#FFC516;--a2:#0A2536;--band:#FCF8F3;--ink:#452016;--soft:#FEF9C3;--pg:#FFFDF9">
+  <div class="pw-wrap">
+    <header class="pw-case-head pw-rv">
+      <div>
+        <div class="pw-num">02 — E-commerce / FMCG</div>
+        <h2 class="pw-title">Daadis</h2>
+        <p class="pw-tagline">Traditional sweets &amp; snacks, modernised</p>
+        <div class="pw-tags"><span class="pw-tag">UI/UX Design</span><span class="pw-tag">Information Architecture</span><span class="pw-tag">Product Grid System</span><span class="pw-tag">Storefront Build</span></div>
+      </div>
+      <dl class="pw-meta">
+        <div><dt>Year</dt><dd>2025 — 26</dd></div>
+        <div><dt>Discipline</dt><dd>E-commerce / FMCG</dd></div>
+        <div><dt>Live site</dt><dd><a class="pw-visit" href="https://daadis.in/" target="_blank" rel="noopener">daadis.in <span>&#8599;</span></a></dd></div>
+      </dl>
+    </header>
+
+    <div class="pw-stage pw-rv">
+      <span class="pw-stage-lab">Live site</span>
+      <div class="pw-browser">
+        <div class="pw-bar"><div class="pw-dots"><i></i><i></i><i></i></div><div class="pw-url">daadis.in</div></div>
+        <img class="pw-shot" src="img_ui/ui-daadis-desktop.jpg" alt="Daadis — full homepage" loading="lazy">
+      </div>
+    </div>
+
+    <div class="pw-body">
+      <div class="pw-blk pw-rv">
+        <h3>The brief &amp; the problem</h3>
+        <p>A legacy sweets and namkeen maker moving online for the first time. Six product families with wildly different shapes — 60g mini sweets next to 200g modaks next to khakhra packs — and no visual system holding them together.</p>
+        <h3 style="margin-top:34px">UI direction</h3>
+        <p>Deep daadi-brown for type, besan yellow as the one call-to-action colour, navy for structural weight. Quicksand keeps it warm and rounded — closer to a mithai box than a SaaS dashboard. Generous cream padding between rows so dense sweets photography never fights itself.</p>
+      </div>
+      <div class="pw-blk pw-rv">
+        <h3>UX decisions that mattered</h3>
+        <ul class="pw-moves">
+          <li><b>One tile, six families</b><span>A single square category tile carries Mithai, Khakhra, Namkeen, Bhakhri, Mini Sweets and Mobile Khakhra. Same crop, same shadow, same label position — the shelf reads as one brand instead of six suppliers.</span></li>
+          <li><b>Weight-first product cards</b><span>Every card leads with grammage (60g, 165g, 200g) because that is the first thing a sweets buyer checks. Price is second, rating third.</span></li>
+          <li><b>FAQ as an objection funnel</b><span>Questions grouped into The Basics, Our Products, Availability &amp; Distribution, Quality &amp; Manufacturing — mapped to the four reasons people abandon a first order from an unfamiliar food brand.</span></li>
+          <li><b>Gram feed as freshness signal</b><span>"From the gram" sits above the blog. For a heritage brand, live social proves the kitchen is running today, not in 1974.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pw-specs pw-rv">
+      <div class="pw-spec">
+        <h4>Colour system</h4>
+        <div class="pw-sw"><div><i style="background:#452016"></i><b>#452016</b><em>Daadi Brown</em></div><div><i style="background:#FFC516"></i><b>#FFC516</b><em>Besan Yellow</em></div><div><i style="background:#0A2536"></i><b>#0A2536</b><em>Deep Navy</em></div><div><i style="background:#FCF8F3"></i><b>#FCF8F3</b><em>Mithai Cream</em></div><div><i style="background:#FEF9C3"></i><b>#FEF9C3</b><em>Soft Saffron</em></div></div>
+        <div class="pw-ratio"><i style="background:#452016;flex:26"></i><i style="background:#FFC516;flex:18"></i><i style="background:#0A2536;flex:14"></i><i style="background:#FCF8F3;flex:32"></i><i style="background:#FEF9C3;flex:10"></i></div>
+        <div class="pw-ratio-lab">Applied ratio across the page</div>
+      </div>
+      <div class="pw-spec">
+        <h4>Typography</h4>
+        <div class="pw-typerow"><div><b>Aa</b><span>Quicksand</span></div><div><b>Aa</b><span>Poppins</span></div></div>
+      </div>
+      <div class="pw-spec">
+        <h4>Page architecture</h4>
+        <div class="pw-secs"><span>Welcome band</span><span>Our Products</span><span>Shop by Collection</span><span>Featured This Week</span><span>From the gram</span><span>Blog</span><span>Social proof</span><span>FAQ accordion</span></div>
+      </div>
+    </div>
+    <div class="pw-mets pw-rv">
+      <div class="pw-met"><b>6</b><span>Product families</span></div><div class="pw-met"><b>4</b><span>FAQ objection groups</span></div><div class="pw-met"><b>1 grid</b><span>Unified card system</span></div><div class="pw-met"><b>Mobile</b><span>Thumb-zone CTAs</span></div>
+    </div>
+  </div>
+  <div class="pw-case-foot"></div>
+</article>
+
+<!-- ═══════════ 03 · Arohance ═══════════ -->
+<article class="pw-case" id="pw-arohance" data-cat="Agency / B2B"
+  style="--a:#8B5CF6;--a2:#22D3EE;--band:#0E0E13;--ink:#FFFFFF;--soft:#1A1A24;--pg:#08080B">
+  <div class="pw-wrap">
+    <header class="pw-case-head pw-rv">
+      <div>
+        <div class="pw-num">03 — Agency / B2B</div>
+        <h2 class="pw-title">Arohance</h2>
+        <p class="pw-tagline">Tech-powered marketing agency</p>
+        <div class="pw-tags"><span class="pw-tag">UI/UX Design</span><span class="pw-tag">Motion Direction</span><span class="pw-tag">Dark UI System</span><span class="pw-tag">Web Build</span></div>
+      </div>
+      <dl class="pw-meta">
+        <div><dt>Year</dt><dd>2025 — 26</dd></div>
+        <div><dt>Discipline</dt><dd>Agency / B2B</dd></div>
+        <div><dt>Live site</dt><dd><a class="pw-visit" href="https://arohance.com/" target="_blank" rel="noopener">arohance.com <span>&#8599;</span></a></dd></div>
+      </dl>
+    </header>
+
+    <div class="pw-stage pw-rv">
+      <span class="pw-stage-lab">Live site</span>
+      <div class="pw-browser">
+        <div class="pw-bar"><div class="pw-dots"><i></i><i></i><i></i></div><div class="pw-url">arohance.com</div></div>
+        <div class="pw-mock">
+          <div class="pw-mock-nav"><b style="color:#fff;font-size:11px">Arohance</b><span>Home About Services</span></div>
+          <div class="pw-mock-in">
+            <span class="pw-mock-mark">Arohance</span>
+            <h4>Empowering<br>your vision</h4>
+            <p>Transforming businesses through tech-powered marketing innovation</p>
+            <span class="pw-mock-cta">Schedule a meet</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pw-body">
+      <div class="pw-blk pw-rv">
+        <h3>The brief &amp; the problem</h3>
+        <p>Every agency site in the category looked identical — stock team photo, five service icons, a form. Arohance needed a site that behaved like proof of capability rather than a claim of it.</p>
+        <h3 style="margin-top:34px">UI direction</h3>
+        <p>Pure black canvas, Inter at tight tracking, and a violet-cyan glow that only ever appears behind the mark. Cards are 5% white on black with a 1px hairline — depth comes from luminosity, not shadow. Everything animates on a single easing curve so the page feels engineered rather than decorated.</p>
+      </div>
+      <div class="pw-blk pw-rv">
+        <h3>UX decisions that mattered</h3>
+        <ul class="pw-moves">
+          <li><b>Strip the imagery, keep the light</b><span>No stock photography anywhere. The only visual asset is the logo, rendered as a light source. Nothing to date, nothing to disprove — the design does the arguing.</span></li>
+          <li><b>Three-word spine</b><span>Innovation, Integration, Acceleration. A single scroll section, three beats, no sub-copy. It gives the pitch a rhythm a prospect can repeat back in a meeting.</span></li>
+          <li><b>Services as outcomes</b><span>Cards are titled by what the client gets — E-Commerce Optimization, AI-Powered Digital Marketing, Brand Identity Development — not by what the team does.</span></li>
+          <li><b>One CTA, repeated</b><span>"Schedule a meet" appears in the nav and again at the close. No newsletter, no chatbot, no second ask competing with the booking.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pw-specs pw-rv">
+      <div class="pw-spec">
+        <h4>Colour system</h4>
+        <div class="pw-sw"><div><i style="background:#000000"></i><b>#000000</b><em>Absolute Black</em></div><div><i style="background:#FFFFFF"></i><b>#FFFFFF</b><em>Signal White</em></div><div><i style="background:#8B5CF6"></i><b>#8B5CF6</b><em>Glow Violet</em></div><div><i style="background:#22D3EE"></i><b>#22D3EE</b><em>Circuit Cyan</em></div><div><i style="background:#1A1A24"></i><b>#1A1A24</b><em>Panel</em></div></div>
+        <div class="pw-ratio"><i style="background:#000000;flex:46"></i><i style="background:#FFFFFF;flex:10"></i><i style="background:#8B5CF6;flex:16"></i><i style="background:#22D3EE;flex:8"></i><i style="background:#1A1A24;flex:20"></i></div>
+        <div class="pw-ratio-lab">Applied ratio across the page</div>
+      </div>
+      <div class="pw-spec">
+        <h4>Typography</h4>
+        <div class="pw-typerow"><div><b>Aa</b><span>Inter</span></div><div><b>Aa</b><span>Inter Tight</span></div></div>
+      </div>
+      <div class="pw-spec">
+        <h4>Page architecture</h4>
+        <div class="pw-secs"><span>Hero — Empowering your vision</span><span>Transforming Vision Into Reality</span><span>Innovation / Integration / Acceleration</span><span>Solutions That Drive Growth</span><span>Five service cards</span><span>Let's Create Something Amazing</span></div>
+      </div>
+    </div>
+    <div class="pw-mets pw-rv">
+      <div class="pw-met"><b>0</b><span>Stock photos</span></div><div class="pw-met"><b>1</b><span>Primary CTA</span></div><div class="pw-met"><b>3</b><span>Pillar words</span></div><div class="pw-met"><b>5</b><span>Service cards</span></div>
+    </div>
+  </div>
+  <div class="pw-case-foot"></div>
+</article>
+
+<!-- ═══════════ 04 · Sweety Intimates ═══════════ -->
+<article class="pw-case" id="pw-sweety" data-cat="E-commerce / Fashion"
+  style="--a:#F06292;--a2:#8E4A63;--band:#FDF2F6;--ink:#2B1620;--soft:#FCE7F0;--pg:#FFFCFD">
+  <div class="pw-wrap">
+    <header class="pw-case-head pw-rv">
+      <div>
+        <div class="pw-num">04 — E-commerce / Fashion</div>
+        <h2 class="pw-title">Sweety Intimates</h2>
+        <p class="pw-tagline">Premium innerwear, built on fit</p>
+        <div class="pw-tags"><span class="pw-tag">UI/UX Design</span><span class="pw-tag">Merchandising UX</span><span class="pw-tag">Size &amp; Fit Flow</span><span class="pw-tag">Storefront Build</span></div>
+      </div>
+      <dl class="pw-meta">
+        <div><dt>Year</dt><dd>2025 — 26</dd></div>
+        <div><dt>Discipline</dt><dd>E-commerce / Fashion</dd></div>
+        <div><dt>Live site</dt><dd><a class="pw-visit" href="https://sweetyintimates.com/" target="_blank" rel="noopener">sweetyintimates.com <span>&#8599;</span></a></dd></div>
+      </dl>
+    </header>
+
+    <div class="pw-stage pw-rv">
+      <span class="pw-stage-lab">Live site</span>
+      <div class="pw-browser">
+        <div class="pw-bar"><div class="pw-dots"><i></i><i></i><i></i></div><div class="pw-url">sweetyintimates.com</div></div>
+        <img class="pw-shot" src="img_ui/ui-sweety-desktop.jpg" alt="Sweety Intimates — storefront" loading="lazy">
+      </div>
+    </div>
+
+    <div class="pw-body">
+      <div class="pw-blk pw-rv">
+        <h3>The brief &amp; the problem</h3>
+        <p>Innerwear is bought on fit and returned on fit. The old grid sold on photography alone, so shoppers guessed their size, guessed wrong, and the return rate carried the P&amp;L.</p>
+        <h3 style="margin-top:34px">UI direction</h3>
+        <p>A single pink (#F06292) does all the work — CTAs, active states, sale flags — against near-white and soft blush. Type is set light and airy with wide line-height. Cards use a 3:4 crop with no hard border, so the grid reads soft rather than clinical.</p>
+      </div>
+      <div class="pw-blk pw-rv">
+        <h3>UX decisions that mattered</h3>
+        <ul class="pw-moves">
+          <li><b>Fit attributes on the card</b><span>Seamless, wirefree, cotton and coverage are surfaced on the grid tile, not buried in a PDP accordion. The filter decision happens before the click.</span></li>
+          <li><b>Category before campaign</b><span>Bras, Panties, Camisoles, Shorts sit above the offer banner. Discount traffic converts, but repeat buyers arrive with a category in mind and should not scroll past a sale to reach it.</span></li>
+          <li><b>Calm, non-performative imagery</b><span>Product-forward crops on a neutral studio ground. The category is bought privately — the interface stays quiet and respectful rather than editorial.</span></li>
+          <li><b>Size confidence loop</b><span>Fit guidance is repeated at grid, PDP and cart. Three chances to correct a size before the order ships is three chances to avoid a return.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pw-specs pw-rv">
+      <div class="pw-spec">
+        <h4>Colour system</h4>
+        <div class="pw-sw"><div><i style="background:#F06292"></i><b>#F06292</b><em>Sweety Pink</em></div><div><i style="background:#FDF2F6"></i><b>#FDF2F6</b><em>Blush</em></div><div><i style="background:#2B1620"></i><b>#2B1620</b><em>Plum Ink</em></div><div><i style="background:#F5F5F6"></i><b>#F5F5F6</b><em>Studio Grey</em></div><div><i style="background:#FFFFFF"></i><b>#FFFFFF</b><em>White</em></div></div>
+        <div class="pw-ratio"><i style="background:#F06292;flex:18"></i><i style="background:#FDF2F6;flex:30"></i><i style="background:#2B1620;flex:14"></i><i style="background:#F5F5F6;flex:22"></i><i style="background:#FFFFFF;flex:16"></i></div>
+        <div class="pw-ratio-lab">Applied ratio across the page</div>
+      </div>
+      <div class="pw-spec">
+        <h4>Typography</h4>
+        <div class="pw-typerow"><div><b>Aa</b><span>Google Sans Flex</span></div><div><b>Aa</b><span>System UI</span></div></div>
+      </div>
+      <div class="pw-spec">
+        <h4>Page architecture</h4>
+        <div class="pw-secs"><span>Offer banner</span><span>Latest collection</span><span>Category shelf — Bras / Panties / Camisoles / Shorts</span><span>Product grid</span><span>Fit guidance</span><span>Footer quick links</span></div>
+      </div>
+    </div>
+    <div class="pw-mets pw-rv">
+      <div class="pw-met"><b>4</b><span>Core categories</span></div><div class="pw-met"><b>3×</b><span>Fit prompts per journey</span></div><div class="pw-met"><b>3:4</b><span>Card ratio</span></div><div class="pw-met"><b>1</b><span>Accent colour</span></div>
+    </div>
+  </div>
+  <div class="pw-case-foot"></div>
+</article>
+
+<!-- ═══════════ 05 · Bibox Exchange ═══════════ -->
+<article class="pw-case" id="pw-bibox" data-cat="Fintech / Crypto"
+  style="--a:#408CFF;--a2:#00C48C;--band:#F5F6FA;--ink:#10171F;--soft:#E8F1FF;--pg:#FFFFFF">
+  <div class="pw-wrap">
+    <header class="pw-case-head pw-rv">
+      <div>
+        <div class="pw-num">05 — Fintech / Crypto</div>
+        <h2 class="pw-title">Bibox Exchange</h2>
+        <p class="pw-tagline">AI digital-asset trading platform</p>
+        <div class="pw-tags"><span class="pw-tag">UI/UX Design</span><span class="pw-tag">Dark/Light Theming</span><span class="pw-tag">Data Density</span><span class="pw-tag">Design System</span></div>
+      </div>
+      <dl class="pw-meta">
+        <div><dt>Year</dt><dd>2025 — 26</dd></div>
+        <div><dt>Discipline</dt><dd>Fintech / Crypto</dd></div>
+        <div><dt>Live site</dt><dd><a class="pw-visit" href="https://www.bibox.com/en" target="_blank" rel="noopener">www.bibox.com <span>&#8599;</span></a></dd></div>
+      </dl>
+    </header>
+
+    <div class="pw-stage pw-rv">
+      <span class="pw-stage-lab">Live site</span>
+      <div class="pw-browser">
+        <div class="pw-bar"><div class="pw-dots"><i></i><i></i><i></i></div><div class="pw-url">www.bibox.com</div></div>
+        <img class="pw-shot" src="img_ui/ui-bibox-desktop.jpg" alt="Bibox — homepage hero" loading="lazy">
+      </div>
+    </div>
+
+    <div class="pw-body">
+      <div class="pw-blk pw-rv">
+        <h3>The brief &amp; the problem</h3>
+        <p>Nine product lines — spot, margin, perpetual futures, convert, lending, bots, copy trading, broker, academy — competing for one homepage. A newcomer and a professional trader needed the same page to work for both.</p>
+        <h3 style="margin-top:34px">UI direction</h3>
+        <p>Bibox blue on a light surface grey, with a full dark theme sharing the same token set. DINPro keeps numerals tabular so price columns align to the decimal. Green and red are reserved exclusively for market direction — never for buttons — so the eye never misreads a CTA as a price move.</p>
+      </div>
+      <div class="pw-blk pw-rv">
+        <h3>UX decisions that mattered</h3>
+        <ul class="pw-moves">
+          <li><b>Two doors, one page</b><span>A Newbie Zone entry and a full mega-nav run in parallel. Beginners get a guided path; pros never lose one-click access to Spot API or COIN-M perpetuals.</span></li>
+          <li><b>Grouped mega-nav, not a list</b><span>Seven labelled groups with descriptions instead of a flat dropdown of 30 links. Scanning cost drops from reading to recognising.</span></li>
+          <li><b>Market table above the fold</b><span>Gainers, Mainstream, Volume Leaders, Newest, DeFi, GameFi as tabs. Live numbers are the reason people open an exchange homepage — everything else waits.</span></li>
+          <li><b>Trust block before feature block</b><span>Robust Security, Professional Team, 24/7 Support, Smooth Operation sit ahead of the product tour. In crypto, the security question is answered first or not at all.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pw-specs pw-rv">
+      <div class="pw-spec">
+        <h4>Colour system</h4>
+        <div class="pw-sw"><div><i style="background:#408CFF"></i><b>#408CFF</b><em>Bibox Blue</em></div><div><i style="background:#10171F"></i><b>#10171F</b><em>Terminal Dark</em></div><div><i style="background:#F5F6FA"></i><b>#F5F6FA</b><em>Surface Grey</em></div><div><i style="background:#00C48C"></i><b>#00C48C</b><em>Long Green</em></div><div><i style="background:#FF5B5B"></i><b>#FF5B5B</b><em>Short Red</em></div></div>
+        <div class="pw-ratio"><i style="background:#408CFF;flex:20"></i><i style="background:#10171F;flex:26"></i><i style="background:#F5F6FA;flex:30"></i><i style="background:#00C48C;flex:14"></i><i style="background:#FF5B5B;flex:10"></i></div>
+        <div class="pw-ratio-lab">Applied ratio across the page</div>
+      </div>
+      <div class="pw-spec">
+        <h4>Typography</h4>
+        <div class="pw-typerow"><div><b>Aa</b><span>DINPro</span></div><div><b>Aa</b><span>SF Pro Text</span></div><div><b>Aa</b><span>PingFang SC</span></div></div>
+      </div>
+      <div class="pw-spec">
+        <h4>Page architecture</h4>
+        <div class="pw-secs"><span>Mega-nav — 7 product groups</span><span>Hero + register</span><span>App download</span><span>Live market table</span><span>Grow in Bibox</span><span>Why Choose Bibox</span><span>Spot / Margin / Futures</span><span>Multi-platform</span><span>Community</span></div>
+      </div>
+    </div>
+    <div class="pw-mets pw-rv">
+      <div class="pw-met"><b>9</b><span>Product lines</span></div><div class="pw-met"><b>2</b><span>Themes, one token set</span></div><div class="pw-met"><b>6</b><span>Market tabs</span></div><div class="pw-met"><b>4</b><span>Platforms shipped</span></div>
+    </div>
+  </div>
+  <div class="pw-case-foot"></div>
+</article>
+
+<!-- ═══════════ 06 · Yudu Robotics ═══════════ -->
+<article class="pw-case" id="pw-yudu" data-cat="Hardware / D2C + Partner"
+  style="--a:#5423E7;--a2:#2CF7A4;--band:#F4F1FE;--ink:#140B33;--soft:#F3E8FF;--pg:#FBFAFF">
+  <div class="pw-wrap">
+    <header class="pw-case-head pw-rv">
+      <div>
+        <div class="pw-num">06 — Hardware / D2C + Partner</div>
+        <h2 class="pw-title">Yudu Robotics</h2>
+        <p class="pw-tagline">Robots, drones &amp; 3D printers</p>
+        <div class="pw-tags"><span class="pw-tag">UI/UX Design</span><span class="pw-tag">Product Storytelling</span><span class="pw-tag">Partner Funnel</span><span class="pw-tag">Web Build</span></div>
+      </div>
+      <dl class="pw-meta">
+        <div><dt>Year</dt><dd>2025 — 26</dd></div>
+        <div><dt>Discipline</dt><dd>Hardware / D2C + Partner</dd></div>
+        <div><dt>Live site</dt><dd><a class="pw-visit" href="https://www.yudurobotics.com/home" target="_blank" rel="noopener">www.yudurobotics.com <span>&#8599;</span></a></dd></div>
+      </dl>
+    </header>
+
+    <div class="pw-stage pw-rv">
+      <span class="pw-stage-lab">Live site</span>
+      <div class="pw-browser">
+        <div class="pw-bar"><div class="pw-dots"><i></i><i></i><i></i></div><div class="pw-url">www.yudurobotics.com</div></div>
+        <img class="pw-shot" src="img_ui/ui-yudu-desktop.jpg" alt="Yudu Robotics — full homepage" loading="lazy">
+      </div>
+    </div>
+
+    <div class="pw-body">
+      <div class="pw-blk pw-rv">
+        <h3>The brief &amp; the problem</h3>
+        <p>One site serving two audiences that want opposite things: a parent buying a first robot kit, and a distributor evaluating margins and warranty terms. Splitting into two sites would have split the brand.</p>
+        <h3 style="margin-top:34px">UI direction</h3>
+        <p>Yudu violet carries the brand, circuit mint handles every interactive accent, deep green anchors the partner sections. TT Hoves gives geometric, slightly technical letterforms that suit hardware without turning cold. Product renders float on lilac wash with soft ambient shadow so each robot reads as an object, not a photo.</p>
+      </div>
+      <div class="pw-blk pw-rv">
+        <h3>UX decisions that mattered</h3>
+        <ul class="pw-moves">
+          <li><b>Consumer scroll, partner exit</b><span>The main scroll is built for the buyer — product, story, awards. A persistent Partner Program route lets distributors leave the consumer narrative at any point without a second site.</span></li>
+          <li><b>Awards as the credibility gate</b><span>Red Dot, Good Design and India awards sit immediately after the hero. For hardware from an unfamiliar brand, third-party validation has to land before the price does.</span></li>
+          <li><b>Catalog by capability</b><span>Codable, Animatronics and Mechanical — not by price band. Parents shop by what the child will learn; the taxonomy matches the intent.</span></li>
+          <li><b>Specs as headline copy</b><span>"38cm, 17 degrees of freedom" is the headline for Zing, not a spec-table row. In hardware, the number is the story.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pw-specs pw-rv">
+      <div class="pw-spec">
+        <h4>Colour system</h4>
+        <div class="pw-sw"><div><i style="background:#5423E7"></i><b>#5423E7</b><em>Yudu Violet</em></div><div><i style="background:#2CF7A4"></i><b>#2CF7A4</b><em>Circuit Mint</em></div><div><i style="background:#0A4029"></i><b>#0A4029</b><em>Deep Green</em></div><div><i style="background:#F4F1FE"></i><b>#F4F1FE</b><em>Lilac Wash</em></div><div><i style="background:#140B33"></i><b>#140B33</b><em>Night Ink</em></div></div>
+        <div class="pw-ratio"><i style="background:#5423E7;flex:26"></i><i style="background:#2CF7A4;flex:14"></i><i style="background:#0A4029;flex:10"></i><i style="background:#F4F1FE;flex:34"></i><i style="background:#140B33;flex:16"></i></div>
+        <div class="pw-ratio-lab">Applied ratio across the page</div>
+      </div>
+      <div class="pw-spec">
+        <h4>Typography</h4>
+        <div class="pw-typerow"><div><b>Aa</b><span>TT Hoves DemiBold</span></div><div><b>Aa</b><span>TT Hoves Regular</span></div></div>
+      </div>
+      <div class="pw-spec">
+        <h4>Page architecture</h4>
+        <div class="pw-secs"><span>Hero — Playful robots to precision printers</span><span>CEO testimonial</span><span>Awards — Red Dot / Good Design / India</span><span>Meet Zing launch</span><span>Product catalog</span><span>Partner CTA</span><span>FAQ</span><span>Contact + map</span></div>
+      </div>
+    </div>
+    <div class="pw-mets pw-rv">
+      <div class="pw-met"><b>2</b><span>Audiences, one site</span></div><div class="pw-met"><b>3</b><span>Award marks</span></div><div class="pw-met"><b>6</b><span>Products</span></div><div class="pw-met"><b>17 DOF</b><span>Hero spec</span></div>
+    </div>
+  </div>
+  <div class="pw-case-foot"></div>
+</article>
+
+  <div class="pw-wrap pw-outro">
+    <div class="pw-eyebrow center">Next</div>
+    <h2>Got a product that<br>deserves better UX?</h2>
+    <p>I design and ship interfaces end to end — from the first audit through to the front-end that goes live.</p>
+    <div class="pw-btns">
+      <a class="pw-btn" href="index.html#contact">Start a project</a>
+      <a class="pw-btn alt" href="graphics-work.html">See graphic design work &#8594;</a>
+    </div>
+  </div>
+</section>
+
+<div class="sk-foot">
+  <a href="index.html">&#8592; Back home</a> ·
+  <a href="graphics-work.html">Graphic design work</a> ·
+  <a href="index.html#contact">Contact</a>
+</div>
+
+<script>
+
+/* sticky header + mobile menu + back to top */
+(function(){
+  var nav=document.getElementById('skNav'), links=document.getElementById('skLinks'), burger=document.getElementById('skBurger');
+  var top=document.createElement('button'); top.id='sktop'; top.type='button'; top.textContent='\u25B2 Top'; document.body.appendChild(top);
+  top.onclick=function(){ window.scrollTo({top:0,behavior:'smooth'}); };
+  if(burger&&links) burger.onclick=function(){ links.classList.toggle('open'); };
+  if(links) links.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ links.classList.remove('open'); }); });
+  addEventListener('scroll',function(){
+    if(nav) nav.classList.toggle('stuck', scrollY>24);
+    top.classList.toggle('on', scrollY>700);
+  },{passive:true});
+})();
+
+(function(){
+  var els=document.querySelectorAll('.pw-rv');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+  els.forEach(function(e){io.observe(e)});
+})();
+(function(){
+  var chips=document.querySelectorAll('.pw-chip');
+  chips.forEach(function(c){
+    c.addEventListener('click',function(){
+      chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+      c.setAttribute('aria-pressed','true');
+      var f=c.dataset.f;
+      document.querySelectorAll('.pw-list li').forEach(function(li){
+        li.style.display=(f==='all'||li.dataset.cat.indexOf(f)===0)?'':'none';
+      });
+    });
+  });
+})();
+(function(){
+  document.querySelectorAll('.pw-root img').forEach(function(img){
+    img.addEventListener('error',function(){
+      var box=img.closest('figure')||img.parentElement;
+      img.style.visibility='hidden';
+      if(box) box.style.background='linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.02))';
+    });
+  });
+})();
+</script>
+<script src="music.js" defer></script>
+</body>
+</html>
