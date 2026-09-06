@@ -715,6 +715,52 @@ html[data-stock="trix"] .card:hover .im img{filter:var(--film)}
 }
 
 
+
+/* ---------- highlighted work portals (UI/UX + Graphics) ---------- */
+.worklinks{
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,2.4vw,1.6rem);
+  margin:clamp(1.6rem,4vw,2.6rem) 0 clamp(2rem,5vw,3rem);
+}
+@media(max-width:860px){.worklinks{grid-template-columns:1fr}}
+.wlink{
+  --wa:var(--orange);
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--card);color:var(--ink);border:2px solid var(--ink);
+  box-shadow:6px 6px 0 var(--ink);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
+}
+.wlink:hover{transform:translate(-3px,-3px);box-shadow:10px 10px 0 var(--ink)}
+.wlink:focus-visible{outline:3px solid var(--wa);outline-offset:4px}
+.wlink .wl-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--ink);border-bottom:2px solid var(--ink)}
+.wlink .wl-strip img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;filter:var(--film);transition:transform .55s var(--ease),filter .4s}
+.wlink:hover .wl-strip img{transform:scale(1.06);filter:none}
+.wlink .wl-body{padding:clamp(1.1rem,2.4vw,1.7rem);display:flex;flex-direction:column;gap:.55rem;flex:1}
+.wlink .wl-top{display:flex;align-items:center;justify-content:space-between;gap:.6rem}
+.wlink .wl-kicker{
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
+  background:var(--wa);color:var(--card);padding:.34rem .6rem;border:2px solid var(--ink);
+}
+.wlink .wl-no{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--ink-3)}
+.wlink h3{font-family:var(--disp);font-size:clamp(1.5rem,3vw,2.1rem);line-height:1.04;letter-spacing:-.02em;margin:.15rem 0 0}
+.wlink p{font-size:.93rem;line-height:1.6;color:var(--ink-2);margin:0}
+.wlink .wl-facts{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.2rem}
+.wlink .wl-facts span{
+  font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+  border:1.5px solid rgba(30,18,12,.28);padding:.3rem .5rem;color:var(--ink-2);
+}
+.wlink .wl-go{
+  margin-top:auto;padding-top:.9rem;display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+}
+.wlink .wl-go i{font-style:normal;transition:transform .3s var(--ease)}
+.wlink:hover .wl-go i{transform:translateX(5px)}
+.wlink::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--wa);
+  transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease);
+}
+.wlink:hover::after{transform:scaleX(1)}
+.wlink-gd{--wa:var(--ochre)}
+
 </style>
 </head>
 <body>
@@ -736,7 +782,8 @@ window.MUSIC = [
     <a href="#about">About</a>
     <a href="#services">What I do</a>
     <a href="#work">Work</a>
-    <a href="work-section.html">UI / UX</a>
+    <a href="uiux-work.html">UI / UX</a>
+    <a href="graphics-work.html">Graphics</a>
     <a href="#journey">Journey</a>
     <a href="#contact">Contact</a>
   </nav>
@@ -867,16 +914,39 @@ window.MUSIC = [
         <span class="btn btn-p">View on Behance &#8599;</span>
       </div>
     </a>
+    <div class="worklinks rv">
 
-    <a class="feature rv" href="work-section.html">
-      <div class="im"><img src="images/work-2.png" alt="UI/UX case studies" loading="lazy"></div>
-      <div class="tx">
-        <span class="tag">UI / UX · Case Studies</span>
-        <h3>Explore my UI / UX work</h3>
-        <p>Six detailed case studies covering research, information architecture, design systems, e-commerce experiences and shipped digital products.</p>
-        <span class="btn btn-p">View UI / UX Work →</span>
-      </div>
-    </a>
+      <a class="wlink wlink-ui" href="uiux-work.html">
+        <span class="wl-strip">
+          <img src="img_ui/ui-daadis-desktop.jpg" alt="Daadis storefront" loading="lazy">
+          <img src="img_ui/ui-sweety-desktop.jpg" alt="Sweety Intimates storefront" loading="lazy">
+          <img src="img_ui/ui-yudu-desktop.jpg" alt="Yudu Robotics website" loading="lazy">
+        </span>
+        <span class="wl-body">
+          <span class="wl-top"><span class="wl-kicker">UI / UX &middot; Case studies</span><span class="wl-no">01</span></span>
+          <h3>UI / UX Work</h3>
+          <p>Six shipped products, start to finish &mdash; research, information architecture, design systems and the front-end that went live. Rosier Foods, Daadis, Arohance, Sweety Intimates, Bibox and Yudu Robotics.</p>
+          <span class="wl-facts"><span>06 case studies</span><span>05 industries</span><span>Design systems</span><span>Shipped</span></span>
+          <span class="wl-go">Open UI / UX work <i>&#8594;</i></span>
+        </span>
+      </a>
+
+      <a class="wlink wlink-gd" href="graphics-work.html">
+        <span class="wl-strip">
+          <img src="img_graphics/gfx-camp-02.jpg" alt="Janmashtami sale creative" loading="lazy">
+          <img src="img_graphics/gfx-camp-04.jpg" alt="Ganesh Chaturthi sale creative" loading="lazy">
+          <img src="img_graphics/gfx-ban-01.jpg" alt="Monsoon sale homepage banner" loading="lazy">
+        </span>
+        <span class="wl-body">
+          <span class="wl-top"><span class="wl-kicker">Graphics &middot; Campaigns</span><span class="wl-no">02</span></span>
+          <h3>Graphic Design Work</h3>
+          <p>Sale campaigns, website banners, packaging and process films &mdash; the tools, the build process and the six brand rules that keep 550+ creatives looking like one brand.</p>
+          <span class="wl-facts"><span>550+ creatives</span><span>12 campaigns</span><span>Packaging</span><span>Motion</span></span>
+          <span class="wl-go">Open graphics work <i>&#8594;</i></span>
+        </span>
+      </a>
+
+    </div>
 
     <div class="workbar rv">
     <div class="filters">
@@ -1311,186 +1381,10 @@ if(FINE && !RM){
 /* ---------- 14. year ---------- */
 (function(){ const y=$('#yr'); if(y) y.textContent=new Date().getFullYear(); })();
 
-/* ---------- 15. MUSIC PLAYER (YouTube-backed) ---------- */
-if (Array.isArray(window.MUSIC) && window.MUSIC.length) (function(){
-  function extractYouTubeId(value){
-    if(!value) return '';
-    const s=String(value).trim();
-    if(/^[A-Za-z0-9_-]{11}$/.test(s)) return s;
-    try{
-      const u=new URL(s);
-      if(u.hostname.includes('youtu.be')) return u.pathname.split('/').filter(Boolean)[0]||'';
-      if(u.hostname.includes('youtube.com')){
-        const v=u.searchParams.get('v');
-        if(v) return v;
-        const parts=u.pathname.split('/').filter(Boolean);
-        const idx=parts.indexOf('shorts');
-        if(idx>=0 && parts[idx+1]) return parts[idx+1];
-        const eidx=parts.indexOf('embed');
-        if(eidx>=0 && parts[eidx+1]) return parts[eidx+1];
-      }
-    }catch(e){}
-    return '';
-  }
-  const TRACKS = window.MUSIC.map(t=>({...t,id:extractYouTubeId(t.url||t.link||t.id)})).filter(t=>t.id);
-  const ICON = {
-    play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
-    pause:'<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
-    prev:'<svg viewBox="0 0 24 24"><path d="M7 6h2v12H7zm3 6l8-6v12z"/></svg>',
-    next:'<svg viewBox="0 0 24 24"><path d="M15 6h2v12h-2zM6 6l8 6-8 6z"/></svg>',
-    shuf:'<svg viewBox="0 0 24 24"><path d="M17 3l4 4-4 4V8.5h-2.2l-2 2.6-1.3-1.6L13.6 7H17zM3 7h4.6l2.2 2.8-1.3 1.6L6.9 9H3zM17 13l4 4-4 4v-2.5h-3.4L3 18.5v-2h9.9l1.9-2.4V13z"/></svg>'
-  };
-  const fmt = s => { s=Math.max(0,Math.floor(s||0)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); };
-
-  const mp=document.createElement('div');
-  mp.id='mp';
-  mp.innerHTML=`
-    <button class="unmute" type="button">&#9834; Tap for sound</button>
-    <span class="art"><img alt=""></span>
-    <span class="meta"><b></b><small></small></span>
-    <span class="eq"><b></b><b></b><b></b></span>
-    <span class="ctrl">
-      <button class="prev" aria-label="Previous track">${ICON.prev}</button>
-      <button class="play" aria-label="Play">${ICON.play}</button>
-      <button class="next" aria-label="Next track">${ICON.next}</button>
-      <button class="shuf" aria-label="Shuffle">${ICON.shuf}</button>
-    </span>
-    <span class="seek" role="slider" aria-label="Seek"><i></i></span>`;
-  document.body.appendChild(mp);
-  const host=document.createElement('div'); host.id='yt'; document.body.appendChild(host);
-  setTimeout(()=>mp.classList.add('up'),RM?0:1800);
-
-  const el={art:mp.querySelector('.art img'),title:mp.querySelector('.meta b'),sub:mp.querySelector('.meta small'),
-            play:mp.querySelector('.play'),prev:mp.querySelector('.prev'),next:mp.querySelector('.next'),
-            shuf:mp.querySelector('.shuf'),seek:mp.querySelector('.seek'),bar:mp.querySelector('.seek i')};
-
-  let i=Math.floor(Math.random()*TRACKS.length), yt=null, ready=false, shuffle=true, timer=null;
-  let userPaused=false;
-  try{ userPaused = localStorage.getItem('mp-paused')==='1'; }catch(e){}
-
-  const paintMeta=()=>{
-    const t=TRACKS[i];
-    el.art.src=`https://i.ytimg.com/vi/${t.id}/default.jpg`;
-    el.title.textContent=t.title;
-    el.sub.textContent='YouTube · 0:00 / '+(t.len||'0:00');
-  };
-  paintMeta();
-
-  mp.classList.add('idle');
-  const setIcon=p=>{ el.play.innerHTML=p?ICON.pause:ICON.play; el.play.setAttribute('aria-label',p?'Pause':'Play'); mp.classList.toggle('playing',p); if(p) mp.classList.remove('idle'); };
-
-  const tick=()=>{
-    if(!yt||!yt.getDuration) return;
-    const d=yt.getDuration()||0, c=yt.getCurrentTime()||0;
-    el.bar.style.width=(d? (c/d*100):0)+'%';
-    el.sub.textContent='YouTube · '+fmt(c)+' / '+fmt(d);
-  };
-
-  const load=(n,autoplay)=>{
-    i=(n+TRACKS.length)%TRACKS.length; paintMeta();
-    if(!yt) return;
-    autoplay ? yt.loadVideoById(TRACKS[i].id) : yt.cueVideoById(TRACKS[i].id);
-  };
-  const step=d=>{
-    if(shuffle && TRACKS.length>1){
-      let n=i, guard=0;
-      while(n===i && guard++<20) n=Math.floor(Math.random()*TRACKS.length);
-      if(n===i) n=(i+1)%TRACKS.length;
-      load(n,true);
-    } else load(i+d,true);
-  };
-
-  el.play.onclick=()=>{
-    if(!ready||!yt){ boot(); return; }   // never leaves the page
-    const st=yt.getPlayerState();
-    if(st===1){ yt.pauseVideo(); userPaused=true; }
-    else { yt.unMute(); yt.setVolume(55); yt.playVideo(); userPaused=false; mp.classList.remove('muted'); }
-    try{ localStorage.setItem('mp-paused',userPaused?'1':'0'); }catch(e){}
-  };
-  el.prev.onclick=()=>{ if(yt&&yt.getCurrentTime&&yt.getCurrentTime()>4){yt.seekTo(0);} else step(-1); };
-  el.next.onclick=()=>step(1);
-  el.shuf.onclick=()=>{ shuffle=!shuffle; el.shuf.classList.toggle('on',shuffle); };
-  const nudge=mp.querySelector('.unmute');
-  if(nudge) nudge.onclick=e=>{
-    e.stopPropagation();
-    if(!yt) return;
-    try{ yt.unMute(); yt.setVolume(70); yt.playVideo(); }catch(e){}
-    userPaused=false; try{ localStorage.setItem('mp-paused','0'); }catch(e){}
-    setTimeout(()=>{ try{ if(!yt.isMuted()) mp.classList.remove('muted'); }catch(e){} },200);
-  };
-  el.seek.onclick=e=>{
-    if(!yt||!yt.getDuration) return;
-    const r=el.seek.getBoundingClientRect();
-    yt.seekTo(Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*(yt.getDuration()||0),true);
-  };
-
-  /* ---- YouTube IFrame API ---- */
-  window.onYouTubeIframeAPIReady=()=>{
-    yt=new YT.Player('yt',{
-      videoId:TRACKS[0].id,
-      playerVars:{autoplay:1,controls:0,disablekb:1,playsinline:1,rel:0,modestbranding:1,iv_load_policy:3},
-      events:{
-        onReady(){
-          ready=true; mp.classList.remove('dead');
-          timer=setInterval(tick,500);
-          if(userPaused){ setIcon(false); return; }
-
-          // Browsers only allow audio once the visitor has interacted with the page.
-          // pointerdown / click / keydown / touchend actually grant that permission —
-          // scroll and wheel do not — so we listen for all of them and only stop
-          // listening once we've CONFIRMED the track is really playing with sound.
-          const GESTURES=['pointerdown','click','keydown','touchend','touchstart'];
-          const withSound=()=>{ try{ return yt.getPlayerState()===1 && yt.isMuted()===false; }catch(e){ return false; } };
-          const start=()=>{ try{ yt.unMute(); yt.setVolume(70); yt.playVideo(); }catch(e){} };
-          const stopListening=()=>GESTURES.forEach(ev=>removeEventListener(ev,wake));
-          function wake(){
-            if(userPaused){ stopListening(); return; }
-            start();
-            setTimeout(()=>{
-              if(withSound()){ mp.classList.remove('muted'); stopListening(); }
-              else { mp.classList.add('muted'); }   // keep waiting for a real gesture
-            },220);
-          }
-          GESTURES.forEach(ev=>addEventListener(ev,wake,{passive:true}));
-          start();
-          setTimeout(()=>{
-            if(userPaused) return;
-            if(!withSound()){
-              try{ yt.mute(); yt.playVideo(); }catch(e){}   // at least start it, silently
-              mp.classList.add('muted');
-            }
-          },900);
-        },
-        onStateChange(e){
-          setIcon(e.data===YT.PlayerState.PLAYING);
-          if(e.data===YT.PlayerState.ENDED) step(1);
-          if(e.data===YT.PlayerState.PLAYING){
-            const d=yt.getVideoData&&yt.getVideoData();
-            if(d&&d.title) el.title.textContent=d.title;
-          }
-        },
-        onError(){ step(1); }
-      }
-    });
-  };
-  const dead=msg=>{ mp.classList.add('dead'); el.sub.textContent='YouTube · '+(msg||'unavailable right now'); };
-  let booting=false;
-  function boot(){
-    if(ready||booting) return;
-    booting=true; mp.classList.remove('dead'); el.sub.textContent='YouTube · loading…';
-    if(window.YT && window.YT.Player){ window.onYouTubeIframeAPIReady(); }
-    else{
-      const tag=document.createElement('script');
-      tag.src='https://www.youtube.com/iframe_api';
-      tag.onerror=()=>{ booting=false; dead(); };
-      document.head.appendChild(tag);
-    }
-    setTimeout(()=>{ booting=false; if(!ready) dead(location.protocol==='file:'?'run the site on a server to play':undefined); },7000);
-  }
-  boot();
-})();
+/* music player now lives in music.js (shared with the work pages) */
 
 })();
 
 </script>
+<script src="music.js" defer></script>
 </body></html>
